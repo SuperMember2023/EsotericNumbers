@@ -2,7 +2,6 @@
 	<view class="u-demo">
 		<view>
 			<u-alert-tips type="primary" title="相同 timerId 的按钮一定时间内只能点击1次"></u-alert-tips>
-			
 		</view>
 
 		<view class="btn-box">
@@ -21,24 +20,24 @@
 			<u-col span="2" >
 				<view >XXX</view>
 			</u-col>
-			<u-col span="2">
+			<u-col span="5">
 				<view >{{zhuguaName}}</view>
 			</u-col>
-			<u-col span="2">
+			<u-col span="3">
 				<view >{{bianguaName}}</view>
 			</u-col>
 		</u-row>
 		<u-row gutter="0">
 			<u-col span="1">
-				<view >六神</view>
+				<view >神</view>
 			</u-col>
 			<u-col span="2" >
 				<view >【伏卦】</view>
 			</u-col>
-			<u-col span="2">
+			<u-col span="5">
 				<view >【主卦】</view>
 			</u-col>
-			<u-col span="2">
+			<u-col span="3">
 				<view >【变卦】</view>
 			</u-col>
 		</u-row>
@@ -50,19 +49,19 @@
 				<u-col span="2" align="center" >
 					<view class="demo-layout bg-purple-light" >{{chungua[index]}}</view>
 				</u-col>
-				<u-col span="4" align="center">
+				<u-col span="5" align="center">
 	<!-- 				<view v-if="item == '1' || item == '3'" class="demo-layout bg-purple-light">▅▅▅</view>
 					<view v-else><view v-html="'▅&#12288;▅'" class="demo-layout bg-purple-light"></view></view> -->
 					<view class="demo-layout bg-purple-light" v-html="zhugua[index]"></view>
 				</u-col>
-				<u-col span="3" align="center">
+				<u-col span="4" align="center">
 		<!-- 			<view v-if="item == '1' || item == '2'" class="demo-layout bg-purple-light">▅▅▅</view>
 					<view v-else><view v-html="'▅&#12288;▅'" class="demo-layout bg-purple-light"></view></view> -->
 					<view class="demo-layout bg-purple-light" v-html="biangua[index]"></view>
 				</u-col>
-				<u-col span="2">
+			<!-- 	<u-col span="2">
 					<view class="demo-layout bg-purple-light">{{chungua[index]}}</view>
-				</u-col>
+				</u-col> -->
 			</u-row>
 		</view>
 		
@@ -110,6 +109,15 @@
 		
 		methods: {
 			btnClick(name) {
+				let wuxingIndex = {
+				    //金、木、水、火、土
+					'金':0,
+					'木':1,
+					'水':2,
+					'火':3,
+					'土':4,
+				}
+				
 				if(this.inputValue.length == 6)
 				{
 					this.userArr=this.inputValue;
@@ -124,37 +132,50 @@
 					
 					this.zhuganShiYing = sortdata.getShiYing(zhushiyin)
 					this.bianganShiYing = sortdata.getShiYing(bianshiyin)
+					let zhuGuaGong = sortdata.getGuaGong(zhuData)
+					let bianGuaGong = sortdata.getGuaGong(bianData)
+					let zhuGuaGongliuQing = sortdata.getGuaGongWuXin(zhuData)
+					let bianGuaGongliuQing = sortdata.getGuaGongWuXin(bianData)
 					
 					//处理主卦
 					for(let i=0; i<this.userArr.length; i++)
 					{
 						let item = this.userArr.charAt(i);
+						let zhuGuaYao = zhuguanajia[i]
+						let wuxin = zhuGuaYao[1]
+						let liuqing = zhuGuaGongliuQing[sortdata.getWuXingIndex(wuxin)[1]]
 						if(item == '0' || item == '2')
 						{
-							this.zhugua[i] = '▅&#12288;▅ ' + zhuguanajia[i] +' '+ this.zhuganShiYing[i]+(item == '2'?' X':'');
+							this.zhugua[i] = '▅&#12288;▅ ' + liuqing+zhuGuaYao +' '+ this.zhuganShiYing[i]+(item == '2'?' X':'');
 						}else
 						{
-							this.zhugua[i] = '▅▅▅ ' + zhuguanajia[i] +' '+ this.zhuganShiYing[i]+(item == '3'?' 〇':'');
+							this.zhugua[i] = '▅▅▅ ' + liuqing+zhuGuaYao +' '+ this.zhuganShiYing[i]+(item == '3'?' 〇':'');
 						}
 					}
 					
 					let bianguanajia = sortdata.getBianGuaNajia(this.userArr)
+					
+					
 					//处理主卦
 					for(let i=0;i<this.userArr.length;i++)
 					{
 						let item = this.userArr.charAt(i);
+						let bianGuaYao = bianguanajia[i]
+						let wuxin = bianGuaYao[1]
+						let liuqing = zhuGuaGongliuQing[sortdata.getWuXingIndex(wuxin)[1]]
+						console.log(wuxin)
 						if(item == '0' || item == '3')
 						{
-							this.biangua[i] = '▅&#12288;▅ ' + bianguanajia[i]+' '+ this.bianganShiYing[i];
+							this.biangua[i] = '▅&#12288;▅ ' + liuqing+ bianGuaYao+' '+ this.bianganShiYing[i];
 						}else
 						{
-							this.biangua[i] = '▅▅▅ ' + bianguanajia[i]+' '+this.bianganShiYing[i];
+							this.biangua[i] = '▅▅▅ ' + liuqing + bianGuaYao+' '+this.bianganShiYing[i];
 						}
 					}
 			
-					this.zhuguaName = zhuData[1] + ' '+zhushiyin
-					this.bianguaName = bianData[1]+ ' '+bianshiyin
-					this.$u.toast(this.zhuganShiYing + zhushiyin)
+					this.zhuguaName = zhuData[1] + ' '+ (zhuGuaGong == undefined ? '' :zhuGuaGong)
+					this.bianguaName = bianData[1]+ ' '+ (bianGuaGong == undefined? '':bianGuaGong)
+					this.$u.toast(zhuGuaGongliuQing)
 				}else
 				{
 					this.$u.toast("卦名不对");
@@ -198,17 +219,17 @@
 	}
 	
 	.bg-purple {
-		font-size: 20rpx;
+		font-size: 22rpx;
 		background: #d3dce6;
 	}
 	
 	.bg-purple-light {
-		font-size: 20rpx;
+		font-size: 22rpx;
 		background: #e5e9f2;
 	}
 	
 	.bg-purple-dark {
-		font-size: 20rpx;
+		font-size: 22rpx;
 		background: #99a9bf;
 	}
 </style>

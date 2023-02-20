@@ -9,6 +9,29 @@ function getChunGuaData (key) {
 function get64Data() {
 	return data;
 }
+
+function getGuaGong(data)
+{
+	if(data[3] != '八纯卦')
+	{
+		return data[4];
+	}
+	return ""
+}
+
+function getGuaGongWuXin(data)
+{
+	if(data[3] != '八纯卦')
+	{
+		return wuxing[chuGuaWuXin[data[4]][0]];
+	}
+	else
+	{
+		return wuxing[data[4]];
+	}
+		
+	
+}
 function getZhuGuaNajia(userArr)
 {
 	let waigua = userArr.substring(0,3);
@@ -80,6 +103,31 @@ function getBianGuaNajia(userArr)
 	
 	return najia;
 }
+let jiaZiWuxin = 
+{
+	'子':['水',2],
+	'丑':['土',4],
+	'寅':['木',1],
+	'卯':['木',1],
+	'辰':['土',4],
+	'巳':['火',3],
+	'午':['火',3],
+	'未':['土',4],
+	'申':['金',0],
+	'酉':['金',0],
+	'戌':['土',4],
+	'亥':['水',2]
+}
+
+let wuxing = {
+    //金、木、水、火、土
+	'金':['兄弟','妻财','子孙','官鬼','父母'],
+	'木':['官鬼','兄弟','父母','子孙','妻财'],
+	'水':['父母','子孙','兄弟','妻财','官鬼'],
+	'火':['妻财','父母','官鬼','兄弟','子孙'],
+	'土':['父母','官鬼','妻财','父母','兄弟'],
+}
+
 
 let chunGua = {
 	'111111':["乾为天","金",['壬戌土','壬申金','壬午火','甲辰土','甲寅木','甲子水']],
@@ -88,9 +136,21 @@ let chunGua = {
 	'010010':["坎为水","水",['戊子水','戊戌土','戊申金','戊午火','戊辰土','戊寅木']],
 	'100100':["艮为山","土",['丙寅木','丙子水','丙戌土','丙申金','丙午火','丙辰土']],
 	'011011':["兑为泽","金",['丁未土','丁酉金','丁亥水','丁丑土','丁卯木','丁巳火']],
-	'110110':["巽为风","木",['壬戌土','壬申金','壬午火','甲辰土','甲寅木','甲子水']],
+	'110110':["巽为风","木",['辛卯木','辛巳火','辛未士','辛酉金','辛亥水','辛丑土']],
 	'001001':["震为雷","木",['庚戌土','庚申金','庚午火','庚辰土','庚寅木','庚子水']],
 };
+
+let chuGuaWuXin = 
+{
+	'乾':['金'],
+	'坤':['土'],
+	'坎':['水'],
+	'离':['火'],
+	'震':['木'],
+	'艮':['土'],
+	'巽':['木'],
+	'兑':['金']
+}
 
 let data = {
 			  '111111': ['1', '乾为天','乾', '八纯卦','金','111111'],
@@ -159,6 +219,11 @@ let data = {
 			  '101010': ['64', '火水未济','未济', '三世卦','离','101010']
 }
 
+function getWuXingIndex(dizhi)
+{
+	return  jiaZiWuxin[dizhi]
+}
+
 function getShiYing(zhushiyin)
 {
 	let data = [];
@@ -193,5 +258,8 @@ export default {
   getZhuGuaData,
   getBianGuaData,
   get64Data,
-  getShiYing
+  getShiYing,
+  getGuaGong,
+  getGuaGongWuXin,
+  getWuXingIndex
 }
