@@ -4,23 +4,84 @@
 		<view class="text-area">
 			<text class="title">{{title}}</text>
 		</view>
-		<text class="u-demo-block__title">基础使用</text>
-		
+		<button @click="getProvider">qq一键登录</button>
+		<button @click="getProvider">手机一键登录</button>
 	</view>
 </template>
 
 <script>
 	export default {
-		data() { 
+		data() {
 			return {
-				title: 'Hello'
+				title: '欢迎使用'
 			}
 		},
 		onLoad() {
-
+			uni.hideTabBar()
+			if(this.$mStore.getters.hasLogin){
+				console.info("登录成功")
+				//跳转到登录成功页面
+				uni.switchTab({
+					url:"/pages/list/list"
+				})
+			}else{
+				console.info("未登录成功")
+			}
 		},
 		methods: {
+			getProvider() {
+				let that = this
+				console.info("开始跳转")			
+				uni.getProvider({
+					service: "oauth",
+					success: function(res) {
+						console.info("获取可用服务提供商=" + res.provider)
+						if(res.provider.indexOf('qq')>-1){
+							console.info('开始尝试qq登录')
+							// that.login()
+							uni.login({
+								provider:'qq',
+								success:(lres)=>{
+									uni.getUserInfo({
+										provider:'qq',
+										success:(userRes)=>{
+											let openId = userRes.userInfo.openId;
+											console.info("qq登录成功==openId==="+openId)
+											this.$mStore.commit("login",true,1)
+											uni.switchTab({
+												url:"/pages/list/list"
+											})
+										}
+									})
+								},fail(lres) {
+									console.info("开始尝试qq登录失败=" , err)
+								}
+							})
+						}
+					},
+					fail(err) {
+						console.info("获取可用服务提供商失败=" ,err)
+					}
+				})
+			},
+			login: function() {
+				//一键登录
+				console.info("开始测试一键登录,先启动预加载")
+				uni.preLogin({
+					provider: 'univerify',
+					success(res) {
+						console.info("预加载成功=" ,res)
+					},
+					fail(err) {
+						console.info("预加载失败=" , err)
+					}
 
+				})
+				uni.login({
+					provider:'univerify',
+					
+				})
+			}
 		}
 	}
 </script>
@@ -45,6 +106,7 @@
 	.text-area {
 		display: flex;
 		justify-content: center;
+		margin-bottom: 50px;
 	}
 
 	.title {

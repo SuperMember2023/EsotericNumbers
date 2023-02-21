@@ -1,7 +1,11 @@
 <script>
 	export default {
+		globalData:{
+			
+		},
 		onLaunch: function() {
 			console.log('App Launch')
+			// uni.hideTabBar()
 		},
 		onShow: function() {
 			console.log('App Show')

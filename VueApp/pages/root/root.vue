@@ -61,7 +61,7 @@
 			<u-button :ripple="true" ripple-bg-color="#909399" class="u-config-item" @click="btnStart">开始</u-button>
 		</view>
 		<!-- 与包裹页面所有内容的元素u-page同级，且在它的下方 -->
-		<u-tabbar v-model="current" :list="list" :mid-button="false"></u-tabbar>
+		<!-- <u-tabbar v-model="current" :list="list" :mid-button="false"></u-tabbar> -->
 	</view>
 </template>
 
