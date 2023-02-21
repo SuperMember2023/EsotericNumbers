@@ -47,7 +47,7 @@
 					<view class="demo-layout bg-purple">妻财</view>
 				</u-col>
 				<u-col span="2" align="center" >
-					<view class="demo-layout bg-purple-light" >{{chungua[index]}}</view>
+					<view class="demo-layout bg-purple-light" >{{fuYao[index]}}</view>
 				</u-col>
 				<u-col span="5" align="center">
 	<!-- 				<view v-if="item == '1' || item == '3'" class="demo-layout bg-purple-light">▅▅▅</view>
@@ -96,7 +96,8 @@
 				zhugua:['','','','','',''],
 				biangua:['','','','','',''],
 				zhuganShiYing:[],
-				bianganShiYing:[]
+				bianganShiYing:[],
+				fuYao:['','','','','','']
 			}
 		},
 		
@@ -136,14 +137,19 @@
 					let bianGuaGong = sortdata.getGuaGong(bianData)
 					let zhuGuaGongliuQing = sortdata.getGuaGongWuXin(zhuData)
 					let bianGuaGongliuQing = sortdata.getGuaGongWuXin(bianData)
-					
+					let tempFuYao = sortdata.getFuYao(zhuData)//伏爻纳甲
 					//处理主卦
 					for(let i=0; i<this.userArr.length; i++)
 					{
 						let item = this.userArr.charAt(i);
 						let zhuGuaYao = zhuguanajia[i]
+						let zhuFuYao = tempFuYao[i]
 						let wuxin = zhuGuaYao[1]
 						let liuqing = zhuGuaGongliuQing[sortdata.getWuXingIndex(wuxin)[1]]
+						//this.fuYao[i] = zhuGuaGongliuQing[sortdata.getWuXingIndex(zhuFuYao[i])[1]]+zhuFuYao
+						let fuYaoWuXin = sortdata.getWuXingIndex(zhuFuYao[1])
+						this.fuYao[i] = zhuGuaGongliuQing[fuYaoWuXin[1]] + tempFuYao[i]
+						console.log(fuYaoWuXin)
 						if(item == '0' || item == '2')
 						{
 							this.zhugua[i] = '▅&#12288;▅ ' + liuqing+zhuGuaYao +' '+ this.zhuganShiYing[i]+(item == '2'?' X':'');
@@ -163,7 +169,7 @@
 						let bianGuaYao = bianguanajia[i]
 						let wuxin = bianGuaYao[1]
 						let liuqing = zhuGuaGongliuQing[sortdata.getWuXingIndex(wuxin)[1]]
-						console.log(wuxin)
+						
 						if(item == '0' || item == '3')
 						{
 							this.biangua[i] = '▅&#12288;▅ ' + liuqing+ bianGuaYao+' '+ this.bianganShiYing[i];
@@ -175,7 +181,7 @@
 			
 					this.zhuguaName = zhuData[1] + ' '+ (zhuGuaGong == undefined ? '' :zhuGuaGong)
 					this.bianguaName = bianData[1]+ ' '+ (bianGuaGong == undefined? '':bianGuaGong)
-					this.$u.toast(zhuGuaGongliuQing)
+					// this.$u.toast(zhuGuaGongliuQing)
 				}else
 				{
 					this.$u.toast("卦名不对");
