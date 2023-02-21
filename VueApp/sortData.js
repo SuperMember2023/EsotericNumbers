@@ -114,6 +114,44 @@ function getBianGuaNajia(userArr)
 	
 	return najia;
 }
+
+let liuShenData=
+{
+	'甲':['玄武','白虎','腾蛇','勾陈','朱雀','青龙'],
+	'乙':['玄武','白虎','腾蛇','勾陈','朱雀','青龙'],
+	'丙':['青龙','玄武','白虎','腾蛇','勾陈','朱雀'],
+	'丁':['青龙','玄武','白虎','腾蛇','勾陈','朱雀'],
+	'戊':['朱雀','青龙','玄武','白虎','腾蛇','勾陈'],
+	'已':['勾陈','朱雀','青龙','玄武','白虎','腾蛇'],
+	'庚':['腾蛇','勾陈','朱雀','青龙','玄武','白虎'],
+	'辛':['腾蛇','勾陈','朱雀','青龙','玄武','白虎'],
+	'壬':['白虎','腾蛇','勾陈','朱雀','青龙','玄武'],
+	'癸':['白虎','腾蛇','勾陈','朱雀','青龙','玄武']
+}
+
+let tianGanShenSha=
+{
+	'甲':['丑未'],
+	'乙':['子申'],
+	'丙':['亥酉'],
+	'丁':['子申'],
+	'戊':['丑未'],
+	'已':['子申'],
+	'庚':['丑未'],
+	'辛':['午寅'],
+	'壬':['卯巳'],
+	'癸':['卯巳']
+}
+function getTianGanShenSha(tianGan)
+{
+	return tianGanShenSha[tianGan]
+}
+
+function getLiuShen(tianGan)
+{
+	return liuShenData[tianGan]
+}
+
 let jiaZiWuxin = 
 {
 	'子':['水',2],
@@ -273,5 +311,7 @@ export default {
   getGuaGong,
   getGuaGongWuXin,
   getWuXingIndex,
-  getFuYao
+  getFuYao,
+  getLiuShen,
+  getTianGanShenSha
 }

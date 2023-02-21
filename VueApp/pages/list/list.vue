@@ -5,20 +5,31 @@
 		</view>
 
 		<view class="btn-box">
-			<u-input v-model="inputValue" placeholder="请输入商品名称" placeholder-class="color:#4a4a4a"/>
+			<u-input v-model="inputValue" placeholder="请输入卦序号:102322" placeholder-class="color:#4a4a4a"/>
 			<u-button @click="btnClick('A3')" timer-id="A">查询</u-button>
-			<u-button @click="testco()">请求云对象的方法</u-button>
+			<!-- <u-button @click="testco()">请求云对象的方法</u-button> -->
+		</view>
+		<view>
+			<u-line color="#2979ff"></u-line>
+		</view>
+		<view  v-html="shijian">
+		</view>
+		<view  v-html="sizhu">
+		</view>
+		<view  v-html="shenSha">
 		</view>
 		<view>
 			<!-- <u-button @click="testco()">请求云对象的方法</u-button> -->
-			<u-subsection :list="list" v-model="current" active-color="#ff9900" mode="button" ></u-subsection>
+			<!-- <u-subsection :list="list" v-model="current" active-color="#ff9900" mode="button" ></u-subsection> -->
+			<!-- <u-divider text="分割线"></u-divider> -->
+				<u-line color="#2979ff"></u-line>
 		</view>
 		<u-row gutter="0">
 			<u-col span="1">
 				<view ></view>
 			</u-col>
 			<u-col span="2" >
-				<view >XXX</view>
+				<view ></view>
 			</u-col>
 			<u-col span="5">
 				<view >{{zhuguaName}}</view>
@@ -44,7 +55,7 @@
 		<view v-for="(item, index) in userArr">		
 			<u-row gutter="0">
 				<u-col span="1">
-					<view class="demo-layout bg-purple">妻财</view>
+					<view class="demo-layout bg-purple">{{liuShen[index]}}</view>
 				</u-col>
 				<u-col span="2" align="center" >
 					<view class="demo-layout bg-purple-light" >{{fuYao[index]}}</view>
@@ -70,6 +81,7 @@
 
 <script>
 	import sortdata from '@/sortData.js'
+	import {Solar,Lunar} from 'lunar-javascript'
 	var numObj = {};
 	export default {
 		data() {
@@ -97,7 +109,14 @@
 				biangua:['','','','','',''],
 				zhuganShiYing:[],
 				bianganShiYing:[],
-				fuYao:['','','','','','']
+				fuYao:['','','','','',''],
+				
+				
+				//四柱信息
+				sizhu:'',
+				shijian:'',
+				liuShen:[],
+				shenSha:''
 			}
 		},
 		
@@ -106,19 +125,30 @@
 			{
 				this.chungua = cgua[2];
 			}
+			let date = new Date()
+			var lunar = Lunar.fromDate(date);
+			var eightChar = lunar.getEightChar();
+			this.sizhu = '干支：'+lunar.getYearInGanZhiByLiChun()+'&#12288;'+ lunar.getMonthInGanZhiExact()+'&#12288;'+ lunar.getDayInGanZhiExact()+'&#12288;'+lunar.getTimeInGanZhi()+' 空亡：'+lunar.getDayXunKong();
+				
+			let year = date.getFullYear()
+			let month = date.getMonth() + 1
+			month >= 9 ? month :  month='0'+month
+			let day = date.getDate()
+			day >= 9 ? day : day = '0'+ day
+			let hour = date.getHours()
+			hour >= 9 ? hour : hour = '0'+hour 
+			let minute = date.getMinutes()
+			minute >= 9 ?  minute : minute ='0'+minute
+			let second = date.getSeconds()
+			second >= 9 ? second : second = '0'+second
+			this.shijian = '时间：'+year + '-'+month+'-'+day+"  "+hour+":"+minute+'【'+lunar.getMonthInChinese()+'月'+lunar.getDayInChinese()+'】'
+			// this.shijian = '【'+lunar.getMonthInChinese()+'月'+lunar.getDayInChinese()'】'
+			this.liuShen = sortdata.getLiuShen(lunar.getDayGanExact())
+			this.shenSha ='神煞：贵人:'+sortdata.getTianGanShenSha(lunar.getDayGanExact())
 		},
 		
 		methods: {
 			btnClick(name) {
-				let wuxingIndex = {
-				    //金、木、水、火、土
-					'金':0,
-					'木':1,
-					'水':2,
-					'火':3,
-					'土':4,
-				}
-				
 				if(this.inputValue.length == 6)
 				{
 					this.userArr=this.inputValue;
@@ -146,10 +176,10 @@
 						let zhuFuYao = tempFuYao[i]
 						let wuxin = zhuGuaYao[1]
 						let liuqing = zhuGuaGongliuQing[sortdata.getWuXingIndex(wuxin)[1]]
-						//this.fuYao[i] = zhuGuaGongliuQing[sortdata.getWuXingIndex(zhuFuYao[i])[1]]+zhuFuYao
+						
 						let fuYaoWuXin = sortdata.getWuXingIndex(zhuFuYao[1])
+						
 						this.fuYao[i] = zhuGuaGongliuQing[fuYaoWuXin[1]] + tempFuYao[i]
-						console.log(fuYaoWuXin)
 						if(item == '0' || item == '2')
 						{
 							this.zhugua[i] = '▅&#12288;▅ ' + liuqing+zhuGuaYao +' '+ this.zhuganShiYing[i]+(item == '2'?' X':'');

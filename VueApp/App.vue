@@ -1,4 +1,5 @@
 <script>
+	import {Solar,Lunar} from 'lunar-javascript'
 	export default {
 		globalData:{
 			
@@ -10,13 +11,13 @@
 		onShow: function() {
 			console.log('App Show')
 			console.log(uni.$u.config.v);
-			// uniCloud.callFunction({
-			// 	name:"data"
-			// }).then(res=>
-			// {
-			// 	console.log(res)
-			// })
-			
+			var lunar = Lunar.fromDate(new Date());
+			var eightChar = lunar.getEightChar();
+			console.log(eightChar.getYear());
+			// console.log(Lunar.fromDate(new Date()).toFullString())
+			// let solar = Solar.fromYmd(1986,5,29);
+			// console.log(solar.toFullString());
+			// console.log(solar.getLunar().toFullString());
 		},
 		onHide: function() {
 			console.log('App Hide')

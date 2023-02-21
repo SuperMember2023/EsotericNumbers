@@ -1,0 +1,13 @@
+{
+  "hash": "09f8ec6b",
+  "browserHash": "1cc11b89",
+  "optimized": {
+    "lunar-javascript": {
+      "src": "../../node_modules/lunar-javascript/index.js",
+      "file": "lunar-javascript.js",
+      "fileHash": "d07125d2",
+      "needsInterop": true
+    }
+  },
+  "chunks": {}
+}
