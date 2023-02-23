@@ -120,8 +120,7 @@
 				zhuganShiYing:[],
 				bianganShiYing:[],
 				fuYao:['','','','','',''],
-				content: `
-									<p>露从今夜白，月是故乡明</p>
+				content: `<p>露从今夜白，月是故乡明</p>
 									<img src="https://cdn.uviewui.com/uview/swiper/2.jpg" />
 								`,
 				
@@ -137,12 +136,23 @@
 			}
 		},
 		
-		onLoad() {
-			let cgua = sortdata.getChunGuaData(this.userArr);
+		onLoad(option) {
+			
+		},
+		onShow(){
+			let userData = getApp().globalData.userData
+			console.log(userData)
+			let date = undefined
+			if(userData != undefined)
 			{
-				this.chungua = cgua[2];
+				date = userData.data?new Date(userData.data):new Date()
+				this.userArr=userData.name
+				this.load()
+			}else
+			{
+				date = new Date()
 			}
-			let date = new Date()
+			 // = userData&&userData.data?new Date(userData.data):new Date()
 			var lunar = Lunar.fromDate(date);
 			var eightChar = lunar.getEightChar();
 			this.sizhu = '干支：'+lunar.getYearInGanZhiByLiChun()+'&#12288;'+ lunar.getMonthInGanZhiExact()+'&#12288;'+ lunar.getDayInGanZhiExact()+'&#12288;'+lunar.getTimeInGanZhi()+' 空亡：'+lunar.getDayXunKong();
@@ -162,80 +172,83 @@
 			
 			this.liuShen = sortdata.getLiuShen(lunar.getDayGanExact())
 			this.shenSha ='神煞：贵人:'+sortdata.getTianGanShenSha(lunar.getDayGanExact())[0]+' 文昌:'+sortdata.getTianGanShenSha(lunar.getDayGanExact())[1] +' 天喜:'+sortdata.getDiZhiShenSha(lunar.getYearZhiExact())
-		},
-		
+		}
+		,
 		methods: {
-			btnClick(name) {
+			load()
+			{
+				let zhuguanajia = sortdata.getZhuGuaNajia(this.userArr)
+				
+				let zhuData = sortdata.getData(sortdata.getZhuGuaData(this.userArr));
+				let bianData = sortdata.getData(sortdata.getBianGuaData(this.userArr));
+				
+				let zhushiyin = zhuData[3];
+				let bianshiyin = bianData[3];
+				
+				this.zhuganShiYing = sortdata.getShiYing(zhushiyin)
+				this.bianganShiYing = sortdata.getShiYing(bianshiyin)
+				let zhuGuaGong = sortdata.getGuaGong(zhuData)
+				let bianGuaGong = sortdata.getGuaGong(bianData)
+				let zhuGuaGongliuQing = sortdata.getGuaGongWuXin(zhuData)
+				let bianGuaGongliuQing = sortdata.getGuaGongWuXin(bianData)
+				let tempFuYao = sortdata.getFuYao(zhuData)//伏爻纳甲
+				this.fuYaoShow = tempFuYao.length > 0
+				//处理主卦
+				for(let i=0; i<this.userArr.length; i++)
+				{
+					let item = this.userArr.charAt(i);
+					let zhuGuaYao = zhuguanajia[i]
+					
+					let wuxin = zhuGuaYao[1]
+					let liuqing = zhuGuaGongliuQing[sortdata.getWuXingIndex(wuxin)[1]]
+					// let fywuxin = fuYaoWuXin.length> 0?fuYaoWuXin[1]:'' 
+					if(this.fuYaoShow)
+					{
+						let zhuFuYao = tempFuYao[i]
+						let fuYaoWuXin = sortdata.getWuXingIndex(zhuFuYao[1])
+						this.fuYao[i] = zhuGuaGongliuQing[fuYaoWuXin[1]] + tempFuYao[i]
+					}
+						
+					let ganzhi = zhuGuaYao.substring(0,2)
+					let nayin = this.nayinShow?sortdata.getNayin(ganzhi):''
+					if(item == '0' || item == '2')
+					{
+						this.zhugua[i] = '▅&#12288;▅ ' + liuqing+zhuGuaYao +nayin +' '+ this.zhuganShiYing[i]+(item == '2'?' X':'');
+					}else
+					{
+						this.zhugua[i] = '▅▅▅ ' + liuqing+zhuGuaYao +nayin+' '+ this.zhuganShiYing[i]+(item == '3'?' 〇':'');
+					}
+				}
+				
+				let bianguanajia = sortdata.getBianGuaNajia(this.userArr)
+				
+				
+				//处理主卦
+				for(let i=0;i<this.userArr.length;i++)
+				{
+					let item = this.userArr.charAt(i);
+					let bianGuaYao = bianguanajia[i]
+					let wuxin = bianGuaYao[1]
+					let liuqing = zhuGuaGongliuQing[sortdata.getWuXingIndex(wuxin)[1]]
+					let ganzhi = bianGuaYao.substring(0,2)
+					let nayin = this.nayinShow?sortdata.getNayin(ganzhi):''
+					if(item == '0' || item == '3')
+					{
+						this.biangua[i] = '▅&#12288;▅ ' + liuqing+ bianGuaYao + nayin//+' '+ this.bianganShiYing[i];
+					}else
+					{
+						this.biangua[i] = '▅▅▅ ' + liuqing + bianGuaYao + nayin//+' '+this.bianganShiYing[i];
+					}
+				}
+							
+				this.zhuguaName = zhuData[1] + ' '+ (zhuGuaGong == undefined ? '' :zhuGuaGong)
+				this.bianguaName = bianData[1]+ ' '+ (bianGuaGong == undefined? '':bianGuaGong)
+			},
+			btnClick() {
 				if(this.inputValue.length == 6)
 				{
-					this.userArr=this.inputValue;
-					
-					let zhuguanajia = sortdata.getZhuGuaNajia(this.userArr)
-					
-					let zhuData = sortdata.getData(sortdata.getZhuGuaData(this.userArr));
-					let bianData = sortdata.getData(sortdata.getBianGuaData(this.userArr));
-					
-					let zhushiyin = zhuData[3];
-					let bianshiyin = bianData[3];
-					
-					this.zhuganShiYing = sortdata.getShiYing(zhushiyin)
-					this.bianganShiYing = sortdata.getShiYing(bianshiyin)
-					let zhuGuaGong = sortdata.getGuaGong(zhuData)
-					let bianGuaGong = sortdata.getGuaGong(bianData)
-					let zhuGuaGongliuQing = sortdata.getGuaGongWuXin(zhuData)
-					let bianGuaGongliuQing = sortdata.getGuaGongWuXin(bianData)
-					let tempFuYao = sortdata.getFuYao(zhuData)//伏爻纳甲
-					this.fuYaoShow = tempFuYao.length > 0
-					//处理主卦
-					for(let i=0; i<this.userArr.length; i++)
-					{
-						let item = this.userArr.charAt(i);
-						let zhuGuaYao = zhuguanajia[i]
-						
-						let wuxin = zhuGuaYao[1]
-						let liuqing = zhuGuaGongliuQing[sortdata.getWuXingIndex(wuxin)[1]]
-						// let fywuxin = fuYaoWuXin.length> 0?fuYaoWuXin[1]:'' 
-						if(this.fuYaoShow)
-						{
-							let zhuFuYao = tempFuYao[i]
-							let fuYaoWuXin = sortdata.getWuXingIndex(zhuFuYao[1])
-							this.fuYao[i] = zhuGuaGongliuQing[fuYaoWuXin[1]] + tempFuYao[i]
-						}
-							
-						let ganzhi = zhuGuaYao.substring(0,2)
-						let nayin = this.nayinShow?sortdata.getNayin(ganzhi):''
-						if(item == '0' || item == '2')
-						{
-							this.zhugua[i] = '▅&#12288;▅ ' + liuqing+zhuGuaYao +nayin +' '+ this.zhuganShiYing[i]+(item == '2'?' X':'');
-						}else
-						{
-							this.zhugua[i] = '▅▅▅ ' + liuqing+zhuGuaYao +nayin+' '+ this.zhuganShiYing[i]+(item == '3'?' 〇':'');
-						}
-					}
-					
-					let bianguanajia = sortdata.getBianGuaNajia(this.userArr)
-					
-					
-					//处理主卦
-					for(let i=0;i<this.userArr.length;i++)
-					{
-						let item = this.userArr.charAt(i);
-						let bianGuaYao = bianguanajia[i]
-						let wuxin = bianGuaYao[1]
-						let liuqing = zhuGuaGongliuQing[sortdata.getWuXingIndex(wuxin)[1]]
-						let ganzhi = bianGuaYao.substring(0,2)
-						let nayin = this.nayinShow?sortdata.getNayin(ganzhi):''
-						if(item == '0' || item == '3')
-						{
-							this.biangua[i] = '▅&#12288;▅ ' + liuqing+ bianGuaYao + nayin//+' '+ this.bianganShiYing[i];
-						}else
-						{
-							this.biangua[i] = '▅▅▅ ' + liuqing + bianGuaYao + nayin//+' '+this.bianganShiYing[i];
-						}
-					}
-			
-					this.zhuguaName = zhuData[1] + ' '+ (zhuGuaGong == undefined ? '' :zhuGuaGong)
-					this.bianguaName = bianData[1]+ ' '+ (bianGuaGong == undefined? '':bianGuaGong)
+					this.userArr=this.inputValue
+					this.load()
 					// this.$u.toast(zhuGuaGongliuQing)
 				}else
 				{
