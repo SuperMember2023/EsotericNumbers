@@ -1,8 +1,9 @@
 <script>
 	import {Solar,Lunar} from 'lunar-javascript'
 	export default {
-		globalData:{
-			
+		globalData: 
+		{
+			userData: undefined,
 		},
 		onLaunch: function() {
 			console.log('App Launch')
