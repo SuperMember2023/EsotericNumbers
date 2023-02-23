@@ -3,22 +3,35 @@
 		<view>
 			<u-alert-tips type="primary" title="相同 timerId 的按钮一定时间内只能点击1次"></u-alert-tips>
 		</view>
-
+		<u-gap height="20" bg-color="#FFFFFF"></u-gap>
+		<u-section class="mb-10" title="基本信息" type="line"  :right="false" sub-title="" padding="0 0 5px 10px" />
 		<view class="btn-box">
-			<u-input v-model="inputValue" placeholder="请输入商品名称" placeholder-class="color:#4a4a4a"/>
+			<u-input v-model="inputValue" placeholder="请输入卦序号:102322" placeholder-class="color:#4a4a4a"/>
 			<u-button @click="btnClick('A3')" timer-id="A">查询</u-button>
-			<u-button @click="testco()">请求云对象的方法</u-button>
+			<!-- <u-button @click="testco()">请求云对象的方法</u-button> -->
 		</view>
 		<view>
-			<!-- <u-button @click="testco()">请求云对象的方法</u-button> -->
-			<u-subsection :list="list" v-model="current" active-color="#ff9900" mode="button" ></u-subsection>
+			<u-line color="#2979ff"></u-line>
 		</view>
+		<view  v-html="shijian">
+		</view>
+		<view  v-html="sizhu">
+		</view>
+		<view  v-html="shenSha">
+		</view>
+		<view>
+				显示全伏爻：<u-switch v-model="fuYaoCellShow" size="25" ></u-switch> 显示纳音：<u-switch v-model="nayinShow" size="25" ></u-switch> 显示星宿：<u-switch v-model="xinxiuShow" size="25" ></u-switch>
+				<u-line color="#2979ff"></u-line>
+		</view>
+		<u-gap height="20" bg-color="#FFFFFF"></u-gap>
+		<u-section class="mb-10" title="卦象信息" type="line"  :right="false" sub-title="" padding="0 0 5px 10px" />
+		
 		<u-row gutter="0">
-			<u-col span="1">
+			<u-col span="1" >
 				<view ></view>
 			</u-col>
-			<u-col span="2" >
-				<view >XXX</view>
+			<u-col span="2" v-if="fuYaoCellShow">
+				<view ></view>
 			</u-col>
 			<u-col span="5">
 				<view >{{zhuguaName}}</view>
@@ -31,9 +44,11 @@
 			<u-col span="1">
 				<view >神</view>
 			</u-col>
-			<u-col span="2" >
+		
+			<u-col span="2" v-if="fuYaoCellShow">
 				<view >【伏卦】</view>
 			</u-col>
+	
 			<u-col span="5">
 				<view >【主卦】</view>
 			</u-col>
@@ -41,35 +56,42 @@
 				<view >【变卦】</view>
 			</u-col>
 		</u-row>
+
 		<view v-for="(item, index) in userArr">		
 			<u-row gutter="0">
 				<u-col span="1">
-					<view class="demo-layout bg-purple">妻财</view>
+					<view class="demo-layout bg-purple">{{liuShen[index]}}</view>
 				</u-col>
-				<u-col span="2" align="center" >
-					<view class="demo-layout bg-purple-light" >{{fuYao[index]}}</view>
+				<u-col span="2" align="center" v-if="fuYaoCellShow">
+					<view class="demo-layout bg-purple" >{{fuYao[index]}}</view>
 				</u-col>
 				<u-col span="5" align="center">
 	<!-- 				<view v-if="item == '1' || item == '3'" class="demo-layout bg-purple-light">▅▅▅</view>
 					<view v-else><view v-html="'▅&#12288;▅'" class="demo-layout bg-purple-light"></view></view> -->
-					<view class="demo-layout bg-purple-light" v-html="zhugua[index]"></view>
+					<view class="demo-layout bg-purple" v-html="zhugua[index]"></view>
 				</u-col>
 				<u-col span="4" align="center">
 		<!-- 			<view v-if="item == '1' || item == '2'" class="demo-layout bg-purple-light">▅▅▅</view>
 					<view v-else><view v-html="'▅&#12288;▅'" class="demo-layout bg-purple-light"></view></view> -->
-					<view class="demo-layout bg-purple-light" v-html="biangua[index]"></view>
+					<view class="demo-layout bg-purple" v-html="biangua[index]"></view>
 				</u-col>
 			<!-- 	<u-col span="2">
 					<view class="demo-layout bg-purple-light">{{chungua[index]}}</view>
 				</u-col> -->
 			</u-row>
 		</view>
-		
+		<u-gap height="20" bg-color="#FFFFFF"></u-gap>
+		<view class="u-content">
+			    <u-section class="mb-10" title="反馈信息" type="line"  :right="false" sub-title="" padding="0 0 5px 10px"/>
+				<u-parse :html="content"></u-parse>
+		</view>
+		<u-gap height="30" bg-color="#FFFFFF" />
 	</view>
 </template>
 
 <script>
 	import sortdata from '@/sortData.js'
+	import {Solar,Lunar} from 'lunar-javascript'
 	var numObj = {};
 	export default {
 		data() {
@@ -97,7 +119,21 @@
 				biangua:['','','','','',''],
 				zhuganShiYing:[],
 				bianganShiYing:[],
-				fuYao:['','','','','','']
+				fuYao:['','','','','',''],
+				content: `
+									<p>露从今夜白，月是故乡明</p>
+									<img src="https://cdn.uviewui.com/uview/swiper/2.jpg" />
+								`,
+				
+				//四柱信息
+				sizhu:'',
+				shijian:'',
+				liuShen:[],
+				shenSha:'',
+				fuYaoShow:true,
+				fuYaoCellShow:true,
+				nayinShow:true,
+				xinxiuShow:true,
 			}
 		},
 		
@@ -106,19 +142,30 @@
 			{
 				this.chungua = cgua[2];
 			}
+			let date = new Date()
+			var lunar = Lunar.fromDate(date);
+			var eightChar = lunar.getEightChar();
+			this.sizhu = '干支：'+lunar.getYearInGanZhiByLiChun()+'&#12288;'+ lunar.getMonthInGanZhiExact()+'&#12288;'+ lunar.getDayInGanZhiExact()+'&#12288;'+lunar.getTimeInGanZhi()+' 空亡：'+lunar.getDayXunKong();
+				
+			let year = date.getFullYear()
+			let month = date.getMonth() + 1
+			month >= 9 ? month :  month='0'+month
+			let day = date.getDate()
+			day >= 9 ? day : day = '0'+ day
+			let hour = date.getHours()
+			hour >= 9 ? hour : hour = '0'+hour 
+			let minute = date.getMinutes()
+			minute >= 9 ?  minute : minute ='0'+minute
+			let second = date.getSeconds()
+			second >= 9 ? second : second = '0'+second
+			this.shijian = '时间：'+year + '-'+month+'-'+day+"  "+hour+":"+minute+'【'+lunar.getMonthInChinese()+'月'+lunar.getDayInChinese()+'】'
+			
+			this.liuShen = sortdata.getLiuShen(lunar.getDayGanExact())
+			this.shenSha ='神煞：贵人:'+sortdata.getTianGanShenSha(lunar.getDayGanExact())[0]+' 文昌:'+sortdata.getTianGanShenSha(lunar.getDayGanExact())[1] +' 天喜:'+sortdata.getDiZhiShenSha(lunar.getYearZhiExact())
 		},
 		
 		methods: {
 			btnClick(name) {
-				let wuxingIndex = {
-				    //金、木、水、火、土
-					'金':0,
-					'木':1,
-					'水':2,
-					'火':3,
-					'土':4,
-				}
-				
 				if(this.inputValue.length == 6)
 				{
 					this.userArr=this.inputValue;
@@ -138,24 +185,31 @@
 					let zhuGuaGongliuQing = sortdata.getGuaGongWuXin(zhuData)
 					let bianGuaGongliuQing = sortdata.getGuaGongWuXin(bianData)
 					let tempFuYao = sortdata.getFuYao(zhuData)//伏爻纳甲
+					this.fuYaoShow = tempFuYao.length > 0
 					//处理主卦
 					for(let i=0; i<this.userArr.length; i++)
 					{
 						let item = this.userArr.charAt(i);
 						let zhuGuaYao = zhuguanajia[i]
-						let zhuFuYao = tempFuYao[i]
+						
 						let wuxin = zhuGuaYao[1]
 						let liuqing = zhuGuaGongliuQing[sortdata.getWuXingIndex(wuxin)[1]]
-						//this.fuYao[i] = zhuGuaGongliuQing[sortdata.getWuXingIndex(zhuFuYao[i])[1]]+zhuFuYao
-						let fuYaoWuXin = sortdata.getWuXingIndex(zhuFuYao[1])
-						this.fuYao[i] = zhuGuaGongliuQing[fuYaoWuXin[1]] + tempFuYao[i]
-						console.log(fuYaoWuXin)
+						// let fywuxin = fuYaoWuXin.length> 0?fuYaoWuXin[1]:'' 
+						if(this.fuYaoShow)
+						{
+							let zhuFuYao = tempFuYao[i]
+							let fuYaoWuXin = sortdata.getWuXingIndex(zhuFuYao[1])
+							this.fuYao[i] = zhuGuaGongliuQing[fuYaoWuXin[1]] + tempFuYao[i]
+						}
+							
+						let ganzhi = zhuGuaYao.substring(0,2)
+						let nayin = this.nayinShow?sortdata.getNayin(ganzhi):''
 						if(item == '0' || item == '2')
 						{
-							this.zhugua[i] = '▅&#12288;▅ ' + liuqing+zhuGuaYao +' '+ this.zhuganShiYing[i]+(item == '2'?' X':'');
+							this.zhugua[i] = '▅&#12288;▅ ' + liuqing+zhuGuaYao +nayin +' '+ this.zhuganShiYing[i]+(item == '2'?' X':'');
 						}else
 						{
-							this.zhugua[i] = '▅▅▅ ' + liuqing+zhuGuaYao +' '+ this.zhuganShiYing[i]+(item == '3'?' 〇':'');
+							this.zhugua[i] = '▅▅▅ ' + liuqing+zhuGuaYao +nayin+' '+ this.zhuganShiYing[i]+(item == '3'?' 〇':'');
 						}
 					}
 					
@@ -169,13 +223,14 @@
 						let bianGuaYao = bianguanajia[i]
 						let wuxin = bianGuaYao[1]
 						let liuqing = zhuGuaGongliuQing[sortdata.getWuXingIndex(wuxin)[1]]
-						
+						let ganzhi = bianGuaYao.substring(0,2)
+						let nayin = this.nayinShow?sortdata.getNayin(ganzhi):''
 						if(item == '0' || item == '3')
 						{
-							this.biangua[i] = '▅&#12288;▅ ' + liuqing+ bianGuaYao+' '+ this.bianganShiYing[i];
+							this.biangua[i] = '▅&#12288;▅ ' + liuqing+ bianGuaYao + nayin//+' '+ this.bianganShiYing[i];
 						}else
 						{
-							this.biangua[i] = '▅▅▅ ' + liuqing + bianGuaYao+' '+this.bianganShiYing[i];
+							this.biangua[i] = '▅▅▅ ' + liuqing + bianGuaYao + nayin//+' '+this.bianganShiYing[i];
 						}
 					}
 			
@@ -225,17 +280,17 @@
 	}
 	
 	.bg-purple {
-		font-size: 22rpx;
+		// font-size: 22rpx;
 		background: #d3dce6;
 	}
 	
 	.bg-purple-light {
-		font-size: 22rpx;
+		// font-size: 22rpx;
 		background: #e5e9f2;
 	}
 	
 	.bg-purple-dark {
-		font-size: 22rpx;
+		// font-size: 22rpx;
 		background: #99a9bf;
 	}
 </style>
