@@ -83,7 +83,7 @@
 		<u-gap height="20" bg-color="#FFFFFF"></u-gap>
 		<view class="u-content">
 			    <u-section class="mb-10" title="反馈信息" type="line"  :right="false" sub-title="" padding="0 0 5px 10px"/>
-				<u-parse :html="content"></u-parse>
+				<!-- <u-parse :html="content"></u-parse> -->
 		</view>
 		<u-gap height="30" bg-color="#FFFFFF" />
 	</view>
