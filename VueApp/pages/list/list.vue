@@ -189,13 +189,14 @@
 							this.fuYao[i] = zhuGuaGongliuQing[fuYaoWuXin[1]] + tempFuYao[i]
 						}
 							
-						// this.fuYao[i] =  tempFuYao[i]
+						let ganzhi = zhuGuaYao.substring(0,2)
+						let nayin = this.nayinShow?sortdata.getNayin(ganzhi):''
 						if(item == '0' || item == '2')
 						{
-							this.zhugua[i] = '▅&#12288;▅ ' + liuqing+zhuGuaYao +' '+ this.zhuganShiYing[i]+(item == '2'?' X':'');
+							this.zhugua[i] = '▅&#12288;▅ ' + liuqing+zhuGuaYao +nayin +' '+ this.zhuganShiYing[i]+(item == '2'?' X':'');
 						}else
 						{
-							this.zhugua[i] = '▅▅▅ ' + liuqing+zhuGuaYao +' '+ this.zhuganShiYing[i]+(item == '3'?' 〇':'');
+							this.zhugua[i] = '▅▅▅ ' + liuqing+zhuGuaYao +nayin+' '+ this.zhuganShiYing[i]+(item == '3'?' 〇':'');
 						}
 					}
 					
@@ -209,13 +210,14 @@
 						let bianGuaYao = bianguanajia[i]
 						let wuxin = bianGuaYao[1]
 						let liuqing = zhuGuaGongliuQing[sortdata.getWuXingIndex(wuxin)[1]]
-						
+						let ganzhi = bianGuaYao.substring(0,2)
+						let nayin = this.nayinShow?sortdata.getNayin(ganzhi):''
 						if(item == '0' || item == '3')
 						{
-							this.biangua[i] = '▅&#12288;▅ ' + liuqing+ bianGuaYao//+' '+ this.bianganShiYing[i];
+							this.biangua[i] = '▅&#12288;▅ ' + liuqing+ bianGuaYao + nayin//+' '+ this.bianganShiYing[i];
 						}else
 						{
-							this.biangua[i] = '▅▅▅ ' + liuqing + bianGuaYao//+' '+this.bianganShiYing[i];
+							this.biangua[i] = '▅▅▅ ' + liuqing + bianGuaYao + nayin//+' '+this.bianganShiYing[i];
 						}
 					}
 			
