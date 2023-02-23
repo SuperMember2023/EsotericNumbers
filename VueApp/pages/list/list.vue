@@ -3,7 +3,8 @@
 		<view>
 			<u-alert-tips type="primary" title="相同 timerId 的按钮一定时间内只能点击1次"></u-alert-tips>
 		</view>
-
+		<u-gap height="20" bg-color="#FFFFFF"></u-gap>
+		<u-section class="mb-10" title="基本信息" type="line"  :right="false" sub-title="" padding="0 0 5px 10px" />
 		<view class="btn-box">
 			<u-input v-model="inputValue" placeholder="请输入卦序号:102322" placeholder-class="color:#4a4a4a"/>
 			<u-button @click="btnClick('A3')" timer-id="A">查询</u-button>
@@ -22,6 +23,9 @@
 				显示全伏爻：<u-switch v-model="fuYaoCellShow" size="25" ></u-switch> 显示纳音：<u-switch v-model="nayinShow" size="25" ></u-switch> 显示星宿：<u-switch v-model="xinxiuShow" size="25" ></u-switch>
 				<u-line color="#2979ff"></u-line>
 		</view>
+		<u-gap height="20" bg-color="#FFFFFF"></u-gap>
+		<u-section class="mb-10" title="卦象信息" type="line"  :right="false" sub-title="" padding="0 0 5px 10px" />
+		
 		<u-row gutter="0">
 			<u-col span="1" >
 				<view ></view>
@@ -52,30 +56,36 @@
 				<view >【变卦】</view>
 			</u-col>
 		</u-row>
+
 		<view v-for="(item, index) in userArr">		
 			<u-row gutter="0">
 				<u-col span="1">
 					<view class="demo-layout bg-purple">{{liuShen[index]}}</view>
 				</u-col>
 				<u-col span="2" align="center" v-if="fuYaoCellShow">
-					<view class="demo-layout bg-purple-light" >{{fuYao[index]}}</view>
+					<view class="demo-layout bg-purple" >{{fuYao[index]}}</view>
 				</u-col>
 				<u-col span="5" align="center">
 	<!-- 				<view v-if="item == '1' || item == '3'" class="demo-layout bg-purple-light">▅▅▅</view>
 					<view v-else><view v-html="'▅&#12288;▅'" class="demo-layout bg-purple-light"></view></view> -->
-					<view class="demo-layout bg-purple-light" v-html="zhugua[index]"></view>
+					<view class="demo-layout bg-purple" v-html="zhugua[index]"></view>
 				</u-col>
 				<u-col span="4" align="center">
 		<!-- 			<view v-if="item == '1' || item == '2'" class="demo-layout bg-purple-light">▅▅▅</view>
 					<view v-else><view v-html="'▅&#12288;▅'" class="demo-layout bg-purple-light"></view></view> -->
-					<view class="demo-layout bg-purple-light" v-html="biangua[index]"></view>
+					<view class="demo-layout bg-purple" v-html="biangua[index]"></view>
 				</u-col>
 			<!-- 	<u-col span="2">
 					<view class="demo-layout bg-purple-light">{{chungua[index]}}</view>
 				</u-col> -->
 			</u-row>
 		</view>
-		
+		<u-gap height="20" bg-color="#FFFFFF"></u-gap>
+		<view class="u-content">
+			    <u-section class="mb-10" title="反馈信息" type="line"  :right="false" sub-title="" padding="0 0 5px 10px"/>
+				<u-parse :html="content"></u-parse>
+		</view>
+		<u-gap height="30" bg-color="#FFFFFF" />
 	</view>
 </template>
 
@@ -110,7 +120,10 @@
 				zhuganShiYing:[],
 				bianganShiYing:[],
 				fuYao:['','','','','',''],
-				
+				content: `
+									<p>露从今夜白，月是故乡明</p>
+									<img src="https://cdn.uviewui.com/uview/swiper/2.jpg" />
+								`,
 				
 				//四柱信息
 				sizhu:'',
