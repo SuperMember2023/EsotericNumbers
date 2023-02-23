@@ -39,7 +39,7 @@ function getFuYao(data)
 	}
 	else
 	{
-		return ['','','','','',''];
+		return [];
 	}
 }
 
@@ -131,17 +131,41 @@ let liuShenData=
 
 let tianGanShenSha=
 {
-	'甲':['丑未'],
-	'乙':['子申'],
-	'丙':['亥酉'],
-	'丁':['子申'],
-	'戊':['丑未'],
-	'已':['子申'],
-	'庚':['丑未'],
-	'辛':['午寅'],
-	'壬':['卯巳'],
-	'癸':['卯巳']
+	//贵人 文昌 
+	'甲':['丑未','巳'],
+	'乙':['子申','午'],
+	'丙':['亥酉','申'],
+	'丁':['子申','酉'],
+	'戊':['丑未','申'],
+	'已':['子申','酉'],
+	'庚':['丑未','亥'],
+	'辛':['午寅','子'],
+	'壬':['卯巳','寅'],
+	'癸':['卯巳','卯']
 }
+
+let dizhiShenSha = 
+{
+	//天喜
+	'子':['酉'],
+	'丑':['申'],
+	'寅':['未'],
+	'卯':['午'],
+	'辰':['巳'],
+	'巳':['辰'],
+	'午':['卯'],
+	'未':['寅'],
+	'申':['丑'],
+	'酉':['子'],
+	'戌':['亥'],
+	'亥':['戌']
+}
+
+function getDiZhiShenSha(tianGan)
+{
+	return dizhiShenSha[tianGan]
+}
+
 function getTianGanShenSha(tianGan)
 {
 	return tianGanShenSha[tianGan]
@@ -313,5 +337,6 @@ export default {
   getWuXingIndex,
   getFuYao,
   getLiuShen,
-  getTianGanShenSha
+  getTianGanShenSha,
+  getDiZhiShenSha
 }

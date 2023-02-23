@@ -19,16 +19,14 @@
 		<view  v-html="shenSha">
 		</view>
 		<view>
-			<!-- <u-button @click="testco()">请求云对象的方法</u-button> -->
-			<!-- <u-subsection :list="list" v-model="current" active-color="#ff9900" mode="button" ></u-subsection> -->
-			<!-- <u-divider text="分割线"></u-divider> -->
+				显示全伏爻：<u-switch v-model="fuYaoCellShow" size="25" ></u-switch> 显示纳音：<u-switch v-model="nayinShow" size="25" ></u-switch> 显示星宿：<u-switch v-model="xinxiuShow" size="25" ></u-switch>
 				<u-line color="#2979ff"></u-line>
 		</view>
 		<u-row gutter="0">
-			<u-col span="1">
+			<u-col span="1" >
 				<view ></view>
 			</u-col>
-			<u-col span="2" >
+			<u-col span="2" v-if="fuYaoCellShow">
 				<view ></view>
 			</u-col>
 			<u-col span="5">
@@ -42,9 +40,11 @@
 			<u-col span="1">
 				<view >神</view>
 			</u-col>
-			<u-col span="2" >
+		
+			<u-col span="2" v-if="fuYaoCellShow">
 				<view >【伏卦】</view>
 			</u-col>
+	
 			<u-col span="5">
 				<view >【主卦】</view>
 			</u-col>
@@ -57,7 +57,7 @@
 				<u-col span="1">
 					<view class="demo-layout bg-purple">{{liuShen[index]}}</view>
 				</u-col>
-				<u-col span="2" align="center" >
+				<u-col span="2" align="center" v-if="fuYaoCellShow">
 					<view class="demo-layout bg-purple-light" >{{fuYao[index]}}</view>
 				</u-col>
 				<u-col span="5" align="center">
@@ -116,7 +116,11 @@
 				sizhu:'',
 				shijian:'',
 				liuShen:[],
-				shenSha:''
+				shenSha:'',
+				fuYaoShow:true,
+				fuYaoCellShow:true,
+				nayinShow:true,
+				xinxiuShow:true,
 			}
 		},
 		
@@ -142,9 +146,9 @@
 			let second = date.getSeconds()
 			second >= 9 ? second : second = '0'+second
 			this.shijian = '时间：'+year + '-'+month+'-'+day+"  "+hour+":"+minute+'【'+lunar.getMonthInChinese()+'月'+lunar.getDayInChinese()+'】'
-			// this.shijian = '【'+lunar.getMonthInChinese()+'月'+lunar.getDayInChinese()'】'
+			
 			this.liuShen = sortdata.getLiuShen(lunar.getDayGanExact())
-			this.shenSha ='神煞：贵人:'+sortdata.getTianGanShenSha(lunar.getDayGanExact())
+			this.shenSha ='神煞：贵人:'+sortdata.getTianGanShenSha(lunar.getDayGanExact())[0]+' 文昌:'+sortdata.getTianGanShenSha(lunar.getDayGanExact())[1] +' 天喜:'+sortdata.getDiZhiShenSha(lunar.getYearZhiExact())
 		},
 		
 		methods: {
@@ -168,18 +172,24 @@
 					let zhuGuaGongliuQing = sortdata.getGuaGongWuXin(zhuData)
 					let bianGuaGongliuQing = sortdata.getGuaGongWuXin(bianData)
 					let tempFuYao = sortdata.getFuYao(zhuData)//伏爻纳甲
+					this.fuYaoShow = tempFuYao.length > 0
 					//处理主卦
 					for(let i=0; i<this.userArr.length; i++)
 					{
 						let item = this.userArr.charAt(i);
 						let zhuGuaYao = zhuguanajia[i]
-						let zhuFuYao = tempFuYao[i]
+						
 						let wuxin = zhuGuaYao[1]
 						let liuqing = zhuGuaGongliuQing[sortdata.getWuXingIndex(wuxin)[1]]
-						
-						let fuYaoWuXin = sortdata.getWuXingIndex(zhuFuYao[1])
-						
-						this.fuYao[i] = zhuGuaGongliuQing[fuYaoWuXin[1]] + tempFuYao[i]
+						// let fywuxin = fuYaoWuXin.length> 0?fuYaoWuXin[1]:'' 
+						if(this.fuYaoShow)
+						{
+							let zhuFuYao = tempFuYao[i]
+							let fuYaoWuXin = sortdata.getWuXingIndex(zhuFuYao[1])
+							this.fuYao[i] = zhuGuaGongliuQing[fuYaoWuXin[1]] + tempFuYao[i]
+						}
+							
+						// this.fuYao[i] =  tempFuYao[i]
 						if(item == '0' || item == '2')
 						{
 							this.zhugua[i] = '▅&#12288;▅ ' + liuqing+zhuGuaYao +' '+ this.zhuganShiYing[i]+(item == '2'?' X':'');
@@ -202,10 +212,10 @@
 						
 						if(item == '0' || item == '3')
 						{
-							this.biangua[i] = '▅&#12288;▅ ' + liuqing+ bianGuaYao+' '+ this.bianganShiYing[i];
+							this.biangua[i] = '▅&#12288;▅ ' + liuqing+ bianGuaYao//+' '+ this.bianganShiYing[i];
 						}else
 						{
-							this.biangua[i] = '▅▅▅ ' + liuqing + bianGuaYao+' '+this.bianganShiYing[i];
+							this.biangua[i] = '▅▅▅ ' + liuqing + bianGuaYao//+' '+this.bianganShiYing[i];
 						}
 					}
 			
@@ -255,17 +265,17 @@
 	}
 	
 	.bg-purple {
-		font-size: 22rpx;
+		// font-size: 22rpx;
 		background: #d3dce6;
 	}
 	
 	.bg-purple-light {
-		font-size: 22rpx;
+		// font-size: 22rpx;
 		background: #e5e9f2;
 	}
 	
 	.bg-purple-dark {
-		font-size: 22rpx;
+		// font-size: 22rpx;
 		background: #99a9bf;
 	}
 </style>
