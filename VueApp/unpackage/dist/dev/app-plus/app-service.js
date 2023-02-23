@@ -72,24 +72,17 @@ if (uni.restoreGlobal) {
     },
     onLoad() {
       uni.hideTabBar();
-      if (this.$mStore.getters.hasLogin) {
-        formatAppLog("info", "at pages/index/index.vue:22", "\u767B\u5F55\u6210\u529F");
-        uni.switchTab({
-          url: "/pages/list/list"
-        });
-      } else {
-        formatAppLog("info", "at pages/index/index.vue:28", "\u672A\u767B\u5F55\u6210\u529F");
-      }
     },
     methods: {
-      getProvider() {
+      qqLogin() {
         formatAppLog("info", "at pages/index/index.vue:34", "\u5F00\u59CB\u8DF3\u8F6C");
+        this.loading("\u767B\u5F55\u4E2D...", 2e3);
         uni.getProvider({
           service: "oauth",
           success: function(res) {
-            formatAppLog("info", "at pages/index/index.vue:38", "\u83B7\u53D6\u53EF\u7528\u670D\u52A1\u63D0\u4F9B\u5546=" + res.provider);
+            formatAppLog("info", "at pages/index/index.vue:39", "\u83B7\u53D6\u53EF\u7528\u670D\u52A1\u63D0\u4F9B\u5546=" + res.provider);
             if (res.provider.indexOf("qq") > -1) {
-              formatAppLog("info", "at pages/index/index.vue:40", "\u5F00\u59CB\u5C1D\u8BD5qq\u767B\u5F55");
+              formatAppLog("info", "at pages/index/index.vue:41", "\u5F00\u59CB\u5C1D\u8BD5qq\u767B\u5F55");
               uni.login({
                 provider: "qq",
                 success: (lres) => {
@@ -97,8 +90,8 @@ if (uni.restoreGlobal) {
                     provider: "qq",
                     success: (userRes) => {
                       let openId = userRes.userInfo.openId;
-                      formatAppLog("info", "at pages/index/index.vue:49", "qq\u767B\u5F55\u6210\u529F==openId===" + openId);
-                      this.$mStore.commit("login", true, 1);
+                      formatAppLog("info", "at pages/index/index.vue:51", "qq\u767B\u5F55\u6210\u529F==openId===" + openId);
+                      uni.hideLoading();
                       uni.switchTab({
                         url: "/pages/list/list"
                       });
@@ -106,30 +99,45 @@ if (uni.restoreGlobal) {
                   });
                 },
                 fail(lres) {
-                  formatAppLog("info", "at pages/index/index.vue:57", "\u5F00\u59CB\u5C1D\u8BD5qq\u767B\u5F55\u5931\u8D25=", err);
+                  formatAppLog("info", "at pages/index/index.vue:61", "\u5F00\u59CB\u5C1D\u8BD5qq\u767B\u5F55\u5931\u8D25=", err);
                 }
               });
             }
           },
           fail(err2) {
-            formatAppLog("info", "at pages/index/index.vue:63", "\u83B7\u53D6\u53EF\u7528\u670D\u52A1\u63D0\u4F9B\u5546\u5931\u8D25=", err2);
+            formatAppLog("info", "at pages/index/index.vue:67", "\u83B7\u53D6\u53EF\u7528\u670D\u52A1\u63D0\u4F9B\u5546\u5931\u8D25=", err2);
           }
         });
       },
       login: function() {
-        formatAppLog("info", "at pages/index/index.vue:69", "\u5F00\u59CB\u6D4B\u8BD5\u4E00\u952E\u767B\u5F55,\u5148\u542F\u52A8\u9884\u52A0\u8F7D");
+        formatAppLog("info", "at pages/index/index.vue:73", "\u5F00\u59CB\u6D4B\u8BD5\u4E00\u952E\u767B\u5F55,\u5148\u542F\u52A8\u9884\u52A0\u8F7D");
+        this.loading("\u767B\u5F55\u4E2D...", 2e3);
         uni.preLogin({
           provider: "univerify",
           success(res) {
-            formatAppLog("info", "at pages/index/index.vue:73", "\u9884\u52A0\u8F7D\u6210\u529F=", res);
+            formatAppLog("info", "at pages/index/index.vue:78", "\u9884\u52A0\u8F7D\u6210\u529F=", res);
           },
           fail(err2) {
-            formatAppLog("info", "at pages/index/index.vue:76", "\u9884\u52A0\u8F7D\u5931\u8D25=", err2);
+            formatAppLog("info", "at pages/index/index.vue:81", "\u9884\u52A0\u8F7D\u5931\u8D25=", err2);
+            uni.switchTab({
+              url: "/pages/list/list"
+            });
           }
         });
         uni.login({
           provider: "univerify"
         });
+      },
+      loading: function(content, time) {
+        uni.showLoading({
+          title: content
+        });
+        setTimeout(() => {
+          uni.hideLoading();
+          uni.switchTab({
+            url: "/pages/list/list"
+          });
+        }, time);
       }
     }
   };
@@ -143,10 +151,10 @@ if (uni.restoreGlobal) {
         vue.createElementVNode("text", { class: "title" }, vue.toDisplayString($data.title), 1)
       ]),
       vue.createElementVNode("button", {
-        onClick: _cache[0] || (_cache[0] = (...args) => $options.getProvider && $options.getProvider(...args))
+        onClick: _cache[0] || (_cache[0] = (...args) => $options.qqLogin && $options.qqLogin(...args))
       }, "qq\u4E00\u952E\u767B\u5F55"),
       vue.createElementVNode("button", {
-        onClick: _cache[1] || (_cache[1] = (...args) => $options.getProvider && $options.getProvider(...args))
+        onClick: _cache[1] || (_cache[1] = (...args) => $options.login && $options.login(...args))
       }, "\u624B\u673A\u4E00\u952E\u767B\u5F55")
     ]);
   }
@@ -4253,6 +4261,26 @@ if (uni.restoreGlobal) {
   function get64Data() {
     return data;
   }
+  function getGuaGong(data2) {
+    if (data2[3] != "\u516B\u7EAF\u5366") {
+      return data2[4];
+    }
+    return "";
+  }
+  function getGuaGongWuXin(data2) {
+    if (data2[3] != "\u516B\u7EAF\u5366") {
+      return wuxing[chuGuaWuXin[data2[4]][0]];
+    } else {
+      return wuxing[data2[4]];
+    }
+  }
+  function getFuYao(data2) {
+    if (data2[3] != "\u516B\u7EAF\u5366") {
+      return chuGuaWuXin[data2[4]][1];
+    } else {
+      return ["", "", "", "", "", ""];
+    }
+  }
   function getZhuGuaNajia(userArr) {
     let waigua = userArr.substring(0, 3);
     let neigua = userArr.substring(3);
@@ -4303,15 +4331,46 @@ if (uni.restoreGlobal) {
     najia[5] = targetNeiChunGua[2][5];
     return najia;
   }
+  let jiaZiWuxin = {
+    "\u5B50": ["\u6C34", 2],
+    "\u4E11": ["\u571F", 4],
+    "\u5BC5": ["\u6728", 1],
+    "\u536F": ["\u6728", 1],
+    "\u8FB0": ["\u571F", 4],
+    "\u5DF3": ["\u706B", 3],
+    "\u5348": ["\u706B", 3],
+    "\u672A": ["\u571F", 4],
+    "\u7533": ["\u91D1", 0],
+    "\u9149": ["\u91D1", 0],
+    "\u620C": ["\u571F", 4],
+    "\u4EA5": ["\u6C34", 2]
+  };
+  let wuxing = {
+    "\u91D1": ["\u5144\u5F1F", "\u59BB\u8D22", "\u5B50\u5B59", "\u5B98\u9B3C", "\u7236\u6BCD"],
+    "\u6728": ["\u5B98\u9B3C", "\u5144\u5F1F", "\u7236\u6BCD", "\u5B50\u5B59", "\u59BB\u8D22"],
+    "\u6C34": ["\u7236\u6BCD", "\u5B50\u5B59", "\u5144\u5F1F", "\u59BB\u8D22", "\u5B98\u9B3C"],
+    "\u706B": ["\u59BB\u8D22", "\u7236\u6BCD", "\u5B98\u9B3C", "\u5144\u5F1F", "\u5B50\u5B59"],
+    "\u571F": ["\u7236\u6BCD", "\u5B98\u9B3C", "\u59BB\u8D22", "\u7236\u6BCD", "\u5144\u5F1F"]
+  };
   let chunGua = {
     "111111": ["\u4E7E\u4E3A\u5929", "\u91D1", ["\u58EC\u620C\u571F", "\u58EC\u7533\u91D1", "\u58EC\u5348\u706B", "\u7532\u8FB0\u571F", "\u7532\u5BC5\u6728", "\u7532\u5B50\u6C34"]],
     "000000": ["\u5764\u4E3A\u5730", "\u571F", ["\u7678\u9149\u91D1", "\u7678\u4EA5\u6C34", "\u7678\u4E11\u571F", "\u4E59\u536F\u6728", "\u4E59\u5DF3\u706B", "\u4E59\u672A\u571F"]],
-    "101101": ["\u79BB\u4E3A\u706B", "\u571F", ["\u5DF1\u5DF3\u706B", "\u5DF1\u672A\u571F", "\u5DF1\u9149\u91D1", "\u5DF1\u4EA5\u6C34", "\u5DF1\u4E11\u571F", "\u5DF1\u536F\u6728"]],
+    "101101": ["\u79BB\u4E3A\u706B", "\u706B", ["\u5DF1\u5DF3\u706B", "\u5DF1\u672A\u571F", "\u5DF1\u9149\u91D1", "\u5DF1\u4EA5\u6C34", "\u5DF1\u4E11\u571F", "\u5DF1\u536F\u6728"]],
     "010010": ["\u574E\u4E3A\u6C34", "\u6C34", ["\u620A\u5B50\u6C34", "\u620A\u620C\u571F", "\u620A\u7533\u91D1", "\u620A\u5348\u706B", "\u620A\u8FB0\u571F", "\u620A\u5BC5\u6728"]],
     "100100": ["\u826E\u4E3A\u5C71", "\u571F", ["\u4E19\u5BC5\u6728", "\u4E19\u5B50\u6C34", "\u4E19\u620C\u571F", "\u4E19\u7533\u91D1", "\u4E19\u5348\u706B", "\u4E19\u8FB0\u571F"]],
     "011011": ["\u5151\u4E3A\u6CFD", "\u91D1", ["\u4E01\u672A\u571F", "\u4E01\u9149\u91D1", "\u4E01\u4EA5\u6C34", "\u4E01\u4E11\u571F", "\u4E01\u536F\u6728", "\u4E01\u5DF3\u706B"]],
-    "110110": ["\u5DFD\u4E3A\u98CE", "\u6728", ["\u58EC\u620C\u571F", "\u58EC\u7533\u91D1", "\u58EC\u5348\u706B", "\u7532\u8FB0\u571F", "\u7532\u5BC5\u6728", "\u7532\u5B50\u6C34"]],
+    "110110": ["\u5DFD\u4E3A\u98CE", "\u6728", ["\u8F9B\u536F\u6728", "\u8F9B\u5DF3\u706B", "\u8F9B\u672A\u58EB", "\u8F9B\u9149\u91D1", "\u8F9B\u4EA5\u6C34", "\u8F9B\u4E11\u571F"]],
     "001001": ["\u9707\u4E3A\u96F7", "\u6728", ["\u5E9A\u620C\u571F", "\u5E9A\u7533\u91D1", "\u5E9A\u5348\u706B", "\u5E9A\u8FB0\u571F", "\u5E9A\u5BC5\u6728", "\u5E9A\u5B50\u6C34"]]
+  };
+  let chuGuaWuXin = {
+    "\u4E7E": ["\u91D1", ["\u58EC\u620C\u571F", "\u58EC\u7533\u91D1", "\u58EC\u5348\u706B", "\u7532\u8FB0\u571F", "\u7532\u5BC5\u6728", "\u7532\u5B50\u6C34"]],
+    "\u5764": ["\u571F", ["\u7678\u9149\u91D1", "\u7678\u4EA5\u6C34", "\u7678\u4E11\u571F", "\u4E59\u536F\u6728", "\u4E59\u5DF3\u706B", "\u4E59\u672A\u571F"]],
+    "\u574E": ["\u6C34", ["\u620A\u5B50\u6C34", "\u620A\u620C\u571F", "\u620A\u7533\u91D1", "\u620A\u5348\u706B", "\u620A\u8FB0\u571F", "\u620A\u5BC5\u6728"]],
+    "\u79BB": ["\u706B", ["\u5DF1\u5DF3\u706B", "\u5DF1\u672A\u571F", "\u5DF1\u9149\u91D1", "\u5DF1\u4EA5\u6C34", "\u5DF1\u4E11\u571F", "\u5DF1\u536F\u6728"]],
+    "\u9707": ["\u6728", ["\u5E9A\u620C\u571F", "\u5E9A\u7533\u91D1", "\u5E9A\u5348\u706B", "\u5E9A\u8FB0\u571F", "\u5E9A\u5BC5\u6728", "\u5E9A\u5B50\u6C34"]],
+    "\u826E": ["\u571F", ["\u4E19\u5BC5\u6728", "\u4E19\u5B50\u6C34", "\u4E19\u620C\u571F", "\u4E19\u7533\u91D1", "\u4E19\u5348\u706B", "\u4E19\u8FB0\u571F"]],
+    "\u5DFD": ["\u6728", ["\u8F9B\u536F\u6728", "\u8F9B\u5DF3\u706B", "\u8F9B\u672A\u58EB", "\u8F9B\u9149\u91D1", "\u8F9B\u4EA5\u6C34", "\u8F9B\u4E11\u571F"]],
+    "\u5151": ["\u91D1", ["\u4E01\u672A\u571F", "\u4E01\u9149\u91D1", "\u4E01\u4EA5\u6C34", "\u4E01\u4E11\u571F", "\u4E01\u536F\u6728", "\u4E01\u5DF3\u706B"]]
   };
   let data = {
     "111111": ["1", "\u4E7E\u4E3A\u5929", "\u4E7E", "\u516B\u7EAF\u5366", "\u91D1", "111111"],
@@ -4379,6 +4438,9 @@ if (uni.restoreGlobal) {
     "010101": ["63", "\u6C34\u706B\u65E2\u6D4E", "\u65E2\u6D4E", "\u4E09\u4E16\u5366", "\u574E", "010101"],
     "101010": ["64", "\u706B\u6C34\u672A\u6D4E", "\u672A\u6D4E", "\u4E09\u4E16\u5366", "\u79BB", "101010"]
   };
+  function getWuXingIndex(dizhi) {
+    return jiaZiWuxin[dizhi];
+  }
   function getShiYing(zhushiyin) {
     let data2 = [];
     if (zhushiyin == "\u4E00\u4E16\u5366") {
@@ -4404,7 +4466,11 @@ if (uni.restoreGlobal) {
     getZhuGuaData,
     getBianGuaData,
     get64Data,
-    getShiYing
+    getShiYing,
+    getGuaGong,
+    getGuaGongWuXin,
+    getWuXingIndex,
+    getFuYao
   };
   const _sfc_main$8 = {
     data() {
@@ -4431,7 +4497,8 @@ if (uni.restoreGlobal) {
         zhugua: ["", "", "", "", "", ""],
         biangua: ["", "", "", "", "", ""],
         zhuganShiYing: [],
-        bianganShiYing: []
+        bianganShiYing: [],
+        fuYao: ["", "", "", "", "", ""]
       };
     },
     onLoad() {
@@ -4451,26 +4518,40 @@ if (uni.restoreGlobal) {
           let bianshiyin = bianData[3];
           this.zhuganShiYing = sortdata.getShiYing(zhushiyin);
           this.bianganShiYing = sortdata.getShiYing(bianshiyin);
+          let zhuGuaGong = sortdata.getGuaGong(zhuData);
+          let bianGuaGong = sortdata.getGuaGong(bianData);
+          let zhuGuaGongliuQing = sortdata.getGuaGongWuXin(zhuData);
+          sortdata.getGuaGongWuXin(bianData);
+          let tempFuYao = sortdata.getFuYao(zhuData);
           for (let i2 = 0; i2 < this.userArr.length; i2++) {
             let item = this.userArr.charAt(i2);
+            let zhuGuaYao = zhuguanajia[i2];
+            let zhuFuYao = tempFuYao[i2];
+            let wuxin = zhuGuaYao[1];
+            let liuqing = zhuGuaGongliuQing[sortdata.getWuXingIndex(wuxin)[1]];
+            let fuYaoWuXin = sortdata.getWuXingIndex(zhuFuYao[1]);
+            this.fuYao[i2] = zhuGuaGongliuQing[fuYaoWuXin[1]] + tempFuYao[i2];
+            formatAppLog("log", "at pages/list/list.vue:152", fuYaoWuXin);
             if (item == "0" || item == "2") {
-              this.zhugua[i2] = "\u2585&#12288;\u2585 " + zhuguanajia[i2] + " " + this.zhuganShiYing[i2] + (item == "2" ? " X" : "");
+              this.zhugua[i2] = "\u2585&#12288;\u2585 " + liuqing + zhuGuaYao + " " + this.zhuganShiYing[i2] + (item == "2" ? " X" : "");
             } else {
-              this.zhugua[i2] = "\u2585\u2585\u2585 " + zhuguanajia[i2] + " " + this.zhuganShiYing[i2] + (item == "3" ? " \u3007" : "");
+              this.zhugua[i2] = "\u2585\u2585\u2585 " + liuqing + zhuGuaYao + " " + this.zhuganShiYing[i2] + (item == "3" ? " \u3007" : "");
             }
           }
           let bianguanajia = sortdata.getBianGuaNajia(this.userArr);
           for (let i2 = 0; i2 < this.userArr.length; i2++) {
             let item = this.userArr.charAt(i2);
+            let bianGuaYao = bianguanajia[i2];
+            let wuxin = bianGuaYao[1];
+            let liuqing = zhuGuaGongliuQing[sortdata.getWuXingIndex(wuxin)[1]];
             if (item == "0" || item == "3") {
-              this.biangua[i2] = "\u2585&#12288;\u2585 " + bianguanajia[i2] + " " + this.bianganShiYing[i2];
+              this.biangua[i2] = "\u2585&#12288;\u2585 " + liuqing + bianGuaYao + " " + this.bianganShiYing[i2];
             } else {
-              this.biangua[i2] = "\u2585\u2585\u2585 " + bianguanajia[i2] + " " + this.bianganShiYing[i2];
+              this.biangua[i2] = "\u2585\u2585\u2585 " + liuqing + bianGuaYao + " " + this.bianganShiYing[i2];
             }
           }
-          this.zhuguaName = zhuData[1] + " " + zhushiyin;
-          this.bianguaName = bianData[1] + " " + bianshiyin;
-          this.$u.toast(this.zhuganShiYing + zhushiyin);
+          this.zhuguaName = zhuData[1] + " " + (zhuGuaGong == void 0 ? "" : zhuGuaGong);
+          this.bianguaName = bianData[1] + " " + (bianGuaGong == void 0 ? "" : bianGuaGong);
         } else {
           this.$u.toast("\u5366\u540D\u4E0D\u5BF9");
         }
@@ -4479,15 +4560,15 @@ if (uni.restoreGlobal) {
         const userdata = pn.importObject("userdata");
         try {
           const res = await userdata.sum(1, 2);
-          formatAppLog("log", "at pages/list/list.vue:167", res);
+          formatAppLog("log", "at pages/list/list.vue:194", res);
           this.$u.toast(res);
         } catch (e) {
-          formatAppLog("log", "at pages/list/list.vue:170", e);
+          formatAppLog("log", "at pages/list/list.vue:197", e);
         }
         pn.callFunction({
           name: "data"
         }).then((res) => {
-          formatAppLog("log", "at pages/list/list.vue:175", res);
+          formatAppLog("log", "at pages/list/list.vue:202", res);
         });
       }
     }
@@ -4555,13 +4636,13 @@ if (uni.restoreGlobal) {
             ]),
             _: 1
           }),
-          vue.createVNode(_component_u_col, { span: "2" }, {
+          vue.createVNode(_component_u_col, { span: "5" }, {
             default: vue.withCtx(() => [
               vue.createElementVNode("view", null, vue.toDisplayString($data.zhuguaName), 1)
             ]),
             _: 1
           }),
-          vue.createVNode(_component_u_col, { span: "2" }, {
+          vue.createVNode(_component_u_col, { span: "3" }, {
             default: vue.withCtx(() => [
               vue.createElementVNode("view", null, vue.toDisplayString($data.bianguaName), 1)
             ]),
@@ -4574,7 +4655,7 @@ if (uni.restoreGlobal) {
         default: vue.withCtx(() => [
           vue.createVNode(_component_u_col, { span: "1" }, {
             default: vue.withCtx(() => [
-              vue.createElementVNode("view", null, "\u516D\u795E")
+              vue.createElementVNode("view", null, "\u795E")
             ]),
             _: 1
           }),
@@ -4584,13 +4665,13 @@ if (uni.restoreGlobal) {
             ]),
             _: 1
           }),
-          vue.createVNode(_component_u_col, { span: "2" }, {
+          vue.createVNode(_component_u_col, { span: "5" }, {
             default: vue.withCtx(() => [
               vue.createElementVNode("view", null, "\u3010\u4E3B\u5366\u3011")
             ]),
             _: 1
           }),
-          vue.createVNode(_component_u_col, { span: "2" }, {
+          vue.createVNode(_component_u_col, { span: "3" }, {
             default: vue.withCtx(() => [
               vue.createElementVNode("view", null, "\u3010\u53D8\u5366\u3011")
             ]),
@@ -4614,12 +4695,12 @@ if (uni.restoreGlobal) {
                 align: "center"
               }, {
                 default: vue.withCtx(() => [
-                  vue.createElementVNode("view", { class: "demo-layout bg-purple-light" }, vue.toDisplayString($data.chungua[index]), 1)
+                  vue.createElementVNode("view", { class: "demo-layout bg-purple-light" }, vue.toDisplayString($data.fuYao[index]), 1)
                 ]),
                 _: 2
               }, 1024),
               vue.createVNode(_component_u_col, {
-                span: "4",
+                span: "5",
                 align: "center"
               }, {
                 default: vue.withCtx(() => [
@@ -4633,7 +4714,7 @@ if (uni.restoreGlobal) {
                 _: 2
               }, 1024),
               vue.createVNode(_component_u_col, {
-                span: "3",
+                span: "4",
                 align: "center"
               }, {
                 default: vue.withCtx(() => [
@@ -4646,12 +4727,7 @@ if (uni.restoreGlobal) {
                 ]),
                 _: 2
               }, 1024),
-              vue.createVNode(_component_u_col, { span: "2" }, {
-                default: vue.withCtx(() => [
-                  vue.createElementVNode("view", { class: "demo-layout bg-purple-light" }, vue.toDisplayString($data.chungua[index]), 1)
-                ]),
-                _: 2
-              }, 1024)
+              vue.createCommentVNode(' 	<u-col span="2">\r\n					<view class="demo-layout bg-purple-light">{{chungua[index]}}</view>\r\n				</u-col> ')
             ]),
             _: 2
           }, 1024)
