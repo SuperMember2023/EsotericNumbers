@@ -4,7 +4,8 @@
 		<view class="text-area">
 			<text class="title">{{title}}</text>
 		</view>
-		<button @click="login">手机一键登录</button>
+		<button @click="login('univerify')">手机一键登录</button>
+		<button @click="login('weixin')">微信登录</button>
 	</view>
 </template>
 
@@ -28,9 +29,9 @@
 			if (univerfy != null) {
 				console.info("登录成功")
 				//跳转到登录成功页面
-				uni.switchTab({
-					url: "/pages/list/list"
-				})
+				// uni.switchTab({
+				// 	url: "/pages/list/list"
+				// })
 			} else {
 				uni.showToast({
 					title: '未登录',
@@ -68,36 +69,43 @@
 			// });
 		},
 		methods: {
-			login: function() {
+			login(key) {
 				//一键登录
 				console.info("开始测试一键登录,先启动预加载")
 				// this.loading('登录中...',2000);
 				let that = this;
-				uni.preLogin({
-					provider: 'univerify',
-					success(res) {
-						console.info("预加载成功=", res)
-						that.loginPhone();
-					},
-					fail(err) {
-						uni.showModal({
-							showCancel: false,
-							title: '预加载失败',
-							content: err.errMsg
-						});
-						// uni.switchTab({
-						// 	url: "/pages/list/list"
-						// })
-					}
-
-				})
+				switch (key) {
+					case 'univerify':
+						uni.preLogin({
+							provider: key,
+							success(res) {
+								console.info("预加载成功=", res)
+								that.dologin(key);
+							},
+							fail(err) {
+								uni.showModal({
+									showCancel: false,
+									title: '预加载失败',
+									content: err.errMsg
+								});
+								// uni.switchTab({
+								// 	url: "/pages/list/list"
+								// })
+							}
+						})
+						break;
+					case 'weixin':
+						that.dologin(key);
+						break;
+				}
+				
 
 			},
-			loginPhone() {
+			dologin(key) {
 				console.info("开始一键登录===")
 				let that = this;
 				uni.login({
-					provider: "univerify",
+					provider: key,
 					success: async (res) => {
 						console.log('login success:', res);
 						// this.Toast({
@@ -114,6 +122,13 @@
 						console.info("登录成功===" + that.openid + "===" + that.access_token);
 						that.loginByUniverify("univerify", res)
 						// #endif
+						// #ifdef MP-WEIXIN
+						console.info("微信登录===")
+						that.weixinLogin(res)
+						// #endif
+
+
+
 					},
 					fail: (err) => {
 						console.log('login fail:', err);
@@ -237,6 +252,33 @@
 						content: `${err.errMsg}，错误码：${err.code}`
 					})
 				})
+			},
+			weixinLogin(res) {
+				// #ifdef MP-WEIXIN
+				console.warn('如需获取openid请参考uni-id: https://uniapp.dcloud.net.cn/uniCloud/uni-id')
+				uni.request({
+					url: 'https://97fca9f2-41f6-449f-a35e-3f135d4c3875.bspapp.com/http/user-center',
+					method: 'POST',
+					data: {
+						action: 'loginByWeixin',
+						params: {
+							code: res.code,
+							platform: 'mp-weixin'
+						}
+					},
+					success(res) {
+						console.log(res);
+						if (res.data.code !== 0) {
+							console.log('获取openid失败：', res.data.errMsg);
+							return
+						}
+						uni.setStorageSync('openid', res.data.openid)
+					},
+					fail(err) {
+						console.log('获取openid失败：', err);
+					}
+				})
+				// #endif
 			},
 			loading: function(content, time) {
 				uni.showLoading({

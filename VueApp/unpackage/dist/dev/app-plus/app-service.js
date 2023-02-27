@@ -80,10 +80,7 @@ if (uni.restoreGlobal) {
       uni.hideTabBar();
       var univerfy = uni.getStorageSync(univerifyInfoKey);
       if (univerfy != null) {
-        formatAppLog("info", "at pages/index/index.vue:29", "\u767B\u5F55\u6210\u529F");
-        uni.switchTab({
-          url: "/pages/list/list"
-        });
+        formatAppLog("info", "at pages/index/index.vue:30", "\u767B\u5F55\u6210\u529F");
       } else {
         uni.showToast({
           title: "\u672A\u767B\u5F55",
@@ -93,38 +90,45 @@ if (uni.restoreGlobal) {
       }
     },
     methods: {
-      login: function() {
-        formatAppLog("info", "at pages/index/index.vue:73", "\u5F00\u59CB\u6D4B\u8BD5\u4E00\u952E\u767B\u5F55,\u5148\u542F\u52A8\u9884\u52A0\u8F7D");
+      login(key) {
+        formatAppLog("info", "at pages/index/index.vue:74", "\u5F00\u59CB\u6D4B\u8BD5\u4E00\u952E\u767B\u5F55,\u5148\u542F\u52A8\u9884\u52A0\u8F7D");
         let that = this;
-        uni.preLogin({
-          provider: "univerify",
-          success(res) {
-            formatAppLog("info", "at pages/index/index.vue:79", "\u9884\u52A0\u8F7D\u6210\u529F=", res);
-            that.loginPhone();
-          },
-          fail(err) {
-            uni.showModal({
-              showCancel: false,
-              title: "\u9884\u52A0\u8F7D\u5931\u8D25",
-              content: err.errMsg
+        switch (key) {
+          case "univerify":
+            uni.preLogin({
+              provider: key,
+              success(res) {
+                formatAppLog("info", "at pages/index/index.vue:82", "\u9884\u52A0\u8F7D\u6210\u529F=", res);
+                that.dologin(key);
+              },
+              fail(err) {
+                uni.showModal({
+                  showCancel: false,
+                  title: "\u9884\u52A0\u8F7D\u5931\u8D25",
+                  content: err.errMsg
+                });
+              }
             });
-          }
-        });
+            break;
+          case "weixin":
+            that.dologin(key);
+            break;
+        }
       },
-      loginPhone() {
-        formatAppLog("info", "at pages/index/index.vue:97", "\u5F00\u59CB\u4E00\u952E\u767B\u5F55===");
+      dologin(key) {
+        formatAppLog("info", "at pages/index/index.vue:105", "\u5F00\u59CB\u4E00\u952E\u767B\u5F55===");
         let that = this;
         uni.login({
-          provider: "univerify",
+          provider: key,
           success: async (res) => {
-            formatAppLog("log", "at pages/index/index.vue:102", "login success:", res);
+            formatAppLog("log", "at pages/index/index.vue:110", "login success:", res);
             that.openid = res.authResult.openid;
             that.access_token = res.authResult.access_token;
-            formatAppLog("info", "at pages/index/index.vue:114", "\u767B\u5F55\u6210\u529F===" + that.openid + "===" + that.access_token);
+            formatAppLog("info", "at pages/index/index.vue:122", "\u767B\u5F55\u6210\u529F===" + that.openid + "===" + that.access_token);
             that.loginByUniverify("univerify", res);
           },
           fail: (err) => {
-            formatAppLog("log", "at pages/index/index.vue:119", "login fail:", err);
+            formatAppLog("log", "at pages/index/index.vue:134", "login fail:", err);
             if (err.code == "30002") {
               uni.closeAuthView();
               this.Toast({
@@ -171,26 +175,26 @@ if (uni.restoreGlobal) {
         });
       },
       loginByUniverify(provider, res) {
-        formatAppLog("info", "at pages/index/index.vue:175", "\u767B\u5F55\u6210\u529F=====");
-        formatAppLog("info", "at pages/index/index.vue:179", "this.openid==");
+        formatAppLog("info", "at pages/index/index.vue:190", "\u767B\u5F55\u6210\u529F=====");
+        formatAppLog("info", "at pages/index/index.vue:194", "this.openid==");
         uni.closeAuthView();
         const univerifyInfo = __spreadValues({
           provider
         }, res.authResult);
-        formatAppLog("info", "at pages/index/index.vue:186", "univerifyInfo===" + JSON.stringify(univerifyInfo));
+        formatAppLog("info", "at pages/index/index.vue:201", "univerifyInfo===" + JSON.stringify(univerifyInfo));
         var p1 = new Promise((resolve, reject) => {
-          formatAppLog("info", "at pages/index/index.vue:190", "Promise===" + JSON.stringify(univerifyInfo));
+          formatAppLog("info", "at pages/index/index.vue:205", "Promise===" + JSON.stringify(univerifyInfo));
           uni.request({
             url: "https://97fca9f2-41f6-449f-a35e-3f135d4c3875.bspapp.com/http/univerify-login",
             method: "POST",
             data: univerifyInfo,
             success: (res2) => {
-              formatAppLog("info", "at pages/index/index.vue:196", "success===" + JSON.stringify(res2));
+              formatAppLog("info", "at pages/index/index.vue:211", "success===" + JSON.stringify(res2));
               const data2 = res2.data;
               if (data2.success) {
                 resolve(data2.phoneNumber);
               } else {
-                formatAppLog("info", "at pages/index/index.vue:201", "\u5931\u8D25===" + data2.msg);
+                formatAppLog("info", "at pages/index/index.vue:216", "\u5931\u8D25===" + data2.msg);
                 uni.showModal({
                   showCancel: false,
                   title: "\u624B\u673A\u53F7\u83B7\u53D6\u5931\u8D25",
@@ -200,7 +204,7 @@ if (uni.restoreGlobal) {
               }
             },
             fail: (err) => {
-              formatAppLog("info", "at pages/index/index.vue:211", "fail===" + JSON.stringify(err));
+              formatAppLog("info", "at pages/index/index.vue:226", "fail===" + JSON.stringify(err));
             }
           });
         });
@@ -213,7 +217,7 @@ if (uni.restoreGlobal) {
             content: `${number2}`,
             success: (res2) => {
               if (res2.confirm) {
-                formatAppLog("log", "at pages/index/index.vue:225", "comfirm");
+                formatAppLog("log", "at pages/index/index.vue:240", "comfirm");
                 uni.switchTab({
                   url: "/pages/list/list"
                 });
@@ -227,6 +231,8 @@ if (uni.restoreGlobal) {
             content: `${err.errMsg}\uFF0C\u9519\u8BEF\u7801\uFF1A${err.code}`
           });
         });
+      },
+      weixinLogin(res) {
       },
       loading: function(content, time) {
         uni.showLoading({
@@ -251,8 +257,11 @@ if (uni.restoreGlobal) {
         vue.createElementVNode("text", { class: "title" }, vue.toDisplayString($data.title), 1)
       ]),
       vue.createElementVNode("button", {
-        onClick: _cache[0] || (_cache[0] = (...args) => $options.login && $options.login(...args))
-      }, "\u624B\u673A\u4E00\u952E\u767B\u5F55")
+        onClick: _cache[0] || (_cache[0] = ($event) => $options.login("univerify"))
+      }, "\u624B\u673A\u4E00\u952E\u767B\u5F55"),
+      vue.createElementVNode("button", {
+        onClick: _cache[1] || (_cache[1] = ($event) => $options.login("weixin"))
+      }, "\u5FAE\u4FE1\u767B\u5F55")
     ]);
   }
   var PagesIndexIndex = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["render", _sfc_render$n], ["__file", "D:/company/workspace/my/git/EsotericNumbers/VueApp/pages/index/index.vue"]]);
