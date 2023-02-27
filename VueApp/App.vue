@@ -28,4 +28,8 @@
 
 <style lang="scss">
     @import "./uni_modules/vk-uview-ui/index.scss";
+	@import '@/uni_modules/uni-scss/index.scss';
+	/* #ifndef APP-PLUS-NVUE */
+	@import '@/common/uni.css';
+	/* #endif*/
 </style>

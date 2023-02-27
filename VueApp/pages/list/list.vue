@@ -66,24 +66,23 @@
 					<view class="demo-layout bg-purple" >{{fuYao[index]}}</view>
 				</u-col>
 				<u-col span="5" align="center">
-	<!-- 				<view v-if="item == '1' || item == '3'" class="demo-layout bg-purple-light">▅▅▅</view>
-					<view v-else><view v-html="'▅&#12288;▅'" class="demo-layout bg-purple-light"></view></view> -->
 					<view class="demo-layout bg-purple" v-html="zhugua[index]"></view>
 				</u-col>
 				<u-col span="4" align="center">
-		<!-- 			<view v-if="item == '1' || item == '2'" class="demo-layout bg-purple-light">▅▅▅</view>
-					<view v-else><view v-html="'▅&#12288;▅'" class="demo-layout bg-purple-light"></view></view> -->
 					<view class="demo-layout bg-purple" v-html="biangua[index]"></view>
 				</u-col>
-			<!-- 	<u-col span="2">
-					<view class="demo-layout bg-purple-light">{{chungua[index]}}</view>
-				</u-col> -->
 			</u-row>
+		</view>
+		
+		<view class="uni-flex uni-row" v-for="(item, index) in userArr">
+			<view class="text" style="width: 80rpx;">{{liuShen[index]}}</view>
+			<view class="text" style="width: 150rpx;" v-if="fuYaoCellShow">{{fuYao[index]}}</view>
+			<view class="text" style="-webkit-flex: 1;flex: 1;" v-html="zhugua[index]"></view>
+			<view class="text" style="-webkit-flex: 1;flex: 1;" v-html="biangua[index]"></view>
 		</view>
 		<u-gap height="20" bg-color="#FFFFFF"></u-gap>
 		<view class="u-content">
 			    <u-section class="mb-10" title="反馈信息" type="line"  :right="false" sub-title="" padding="0 0 5px 10px"/>
-				<!-- <u-parse :html="content"></u-parse> -->
 		</view>
 		<u-gap height="30" bg-color="#FFFFFF" />
 	</view>
@@ -129,9 +128,17 @@
 				shijian:'',
 				liuShen:[],
 				shenSha:'',
-				fuYaoShow:true,
-				fuYaoCellShow:true,
-				nayinShow:true,
+/* #ifdef H5 */
+				fuYaoShow:false,
+				fuYaoCellShow:false,
+				nayinShow:false,
+/* #else */					
+				fuYaoShow:false,
+				fuYaoCellShow:false,
+				nayinShow:false,
+/* #endif */
+			
+
 				xinxiuShow:true,
 			}
 		},
@@ -232,6 +239,7 @@
 					let liuqing = zhuGuaGongliuQing[sortdata.getWuXingIndex(wuxin)[1]]
 					let ganzhi = bianGuaYao.substring(0,2)
 					let nayin = this.nayinShow?sortdata.getNayin(ganzhi):''
+					nayin = ''
 					if(item == '0' || item == '3')
 					{
 						this.biangua[i] = '▅&#12288;▅ ' + liuqing+ bianGuaYao + nayin//+' '+ this.bianganShiYing[i];
@@ -305,5 +313,28 @@
 	.bg-purple-dark {
 		// font-size: 22rpx;
 		background: #99a9bf;
+	}
+	.flex-item {
+		width: 33.3%;
+		height: 200rpx;
+		text-align: center;
+		line-height: 200rpx;
+	}
+	
+	.flex-item-V {
+		width: 100%;
+		height: 150rpx;
+		text-align: center;
+		line-height: 150rpx;
+	}
+	.text {
+		margin: 15rpx 2rpx;
+		padding: 0 10rpx;
+		background-color: #ebebeb;
+		height: 70rpx;
+		line-height: 70rpx;
+		text-align: left;
+		color: #777;
+		font-size: 26rpx;
 	}
 </style>
