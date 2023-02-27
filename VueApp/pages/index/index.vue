@@ -4,102 +4,250 @@
 		<view class="text-area">
 			<text class="title">{{title}}</text>
 		</view>
-		<button @click="qqLogin">qq一键登录</button>
 		<button @click="login">手机一键登录</button>
 	</view>
 </template>
 
 <script>
+	const univerifyInfoKey = 'univerifyInfo';
 	export default {
 		data() {
 			return {
-				title: '欢迎使用'
+				title: '登录',
+				isLogin: false,
+				providerList: [],
+				univerifyBtnLoading: false,
+				openid: "",
+				access_token: ""
+
 			}
 		},
 		onLoad() {
 			uni.hideTabBar()
-			// if(this.$mStore.getters.hasLogin){
-			// 	console.info("登录成功")
-			// 	//跳转到登录成功页面
-			// 	uni.switchTab({
-			// 		url:"/pages/list/list"
-			// 	})
-			// }else{
-			// 	console.info("未登录成功")
-			// }
+			var univerfy = uni.getStorageSync(univerifyInfoKey);
+			if (univerfy != null) {
+				console.info("登录成功")
+				//跳转到登录成功页面
+				uni.switchTab({
+					url: "/pages/list/list"
+				})
+			} else {
+				uni.showToast({
+					title: '未登录',
+					icon: 'none',
+					duration: 2000
+				});
+			}
+			// uni.getProvider({
+			// 	service: 'oauth',
+			// 	success: (result) => {
+			// 		this.providerList = result.provider.map((value) => {
+			// 			let providerName = '';
+			// 			switch (value) {
+			// 				case 'weixin':
+			// 					providerName = '微信登录'
+			// 					break;
+			// 				case 'qq':
+			// 					providerName = 'QQ登录'
+			// 					break;
+			// 				case 'univerify':
+			// 					providerName = '一键登录'
+			// 					break;
+			// 			}
+			// 			console.info("getProvider===" + providerName + " value:" + value)
+			// 			return {
+			// 				name: providerName,
+			// 				id: value
+			// 			}
+			// 		});
+
+			// 	},
+			// 	fail: (error) => {
+			// 		console.log('获取登录通道失败', error);
+			// 	}
+			// });
 		},
 		methods: {
-			qqLogin() {
-				let that = this
-				console.info("开始跳转")
-				this.loading('登录中...',2000);
-				uni.getProvider({
-					service: "oauth",
-					success: function(res) {
-						console.info("获取可用服务提供商=" + res.provider)
-						if (res.provider.indexOf('qq') > -1) {
-							console.info('开始尝试qq登录')
-							// that.login()
-							//加载圈
-							uni.login({
-								provider: 'qq',
-								success: (lres) => {
-									uni.getUserInfo({
-										provider: 'qq',
-										success: (userRes) => {
-											let openId = userRes.userInfo.openId;
-											console.info("qq登录成功==openId===" + openId);
-											uni.hideLoading();
-											// this.$mStore.commit("login",true,1)
-											uni.switchTab({
-												url: "/pages/list/list"
-											})
-										}
-									})
-								},
-								fail(lres) {
-									console.info("开始尝试qq登录失败=", err)
-								}
-							})
-						}
-					},
-					fail(err) {
-						console.info("获取可用服务提供商失败=", err)
-					}
-				})
-			},
 			login: function() {
 				//一键登录
 				console.info("开始测试一键登录,先启动预加载")
-				this.loading('登录中...',2000);
+				// this.loading('登录中...',2000);
+				let that = this;
 				uni.preLogin({
 					provider: 'univerify',
 					success(res) {
 						console.info("预加载成功=", res)
+						that.loginPhone();
 					},
 					fail(err) {
-						console.info("预加载失败=", err)
-						uni.switchTab({
-							url: "/pages/list/list"
-						})
+						uni.showModal({
+							showCancel: false,
+							title: '预加载失败',
+							content: err.errMsg
+						});
+						// uni.switchTab({
+						// 	url: "/pages/list/list"
+						// })
 					}
 
 				})
-				uni.login({
-					provider: 'univerify',
 
+			},
+			loginPhone() {
+				console.info("开始一键登录===")
+				let that = this;
+				uni.login({
+					provider: "univerify",
+					success: async (res) => {
+						console.log('login success:', res);
+						// this.Toast({
+						// 	title: '登录成功'
+						// })
+						// 更新保存在 store 中的登录状态
+						// this.isLogin = true;
+
+						// #ifdef APP-PLUS
+						//设置登录的类型
+						// this.setUniverifyLogin(provider.id === 'univerify')
+						that.openid = res.authResult.openid;
+						that.access_token = res.authResult.access_token;
+						console.info("登录成功===" + that.openid + "===" + that.access_token);
+						that.loginByUniverify("univerify", res)
+						// #endif
+					},
+					fail: (err) => {
+						console.log('login fail:', err);
+
+						// 一键登录点击其他登录方式
+						if (err.code == '30002') {
+							uni.closeAuthView();
+							this.Toast({
+								title: '其他登录方式'
+							})
+							return;
+						}
+
+						// 未开通
+						if (err.code == 1000) {
+							uni.showModal({
+								title: '登录失败',
+								content: `${err.errMsg}\n，错误码：${err.code}`,
+								confirmText: '开通指南',
+								cancelText: '确定',
+								success: (res) => {
+									if (res.confirm) {
+										setTimeout(() => {
+											plus.runtime.openWeb(
+												'https://ask.dcloud.net.cn/article/37965'
+											)
+										}, 500)
+									}
+								}
+							});
+							return;
+						}
+
+						// 一键登录预登陆失败
+						if (err.code == '30005') {
+							uni.showModal({
+								showCancel: false,
+								title: '预登录失败',
+								content: err.errMsg
+							});
+							return;
+						}
+
+						// 一键登录用户关闭验证界面
+						if (err.code != '30003') {
+							uni.showModal({
+								showCancel: false,
+								title: '登录失败',
+								content: JSON.stringify(err)
+							});
+						}
+					},
+					complete: () => {
+						this.univerifyBtnLoading = false;
+					}
+				});
+			},
+			loginByUniverify(provider, res) {
+				console.info("登录成功=====")
+				// console.info("loginByUniverify ====", provider, "==" + JSON.stringify(res))
+				//设置登录状态
+				// this.setUniverifyLogin(true);
+				console.info("this.openid==")
+				uni.closeAuthView();
+
+				const univerifyInfo = {
+					provider,
+					...res.authResult,
+				}
+				console.info("univerifyInfo===" + JSON.stringify(univerifyInfo))
+
+				var p1 = new Promise((resolve, reject) => {
+
+					console.info("Promise===" + JSON.stringify(univerifyInfo))
+					uni.request({
+						url: 'https://97fca9f2-41f6-449f-a35e-3f135d4c3875.bspapp.com/http/univerify-login',
+						method: 'POST',
+						data: univerifyInfo,
+						success: (res) => {
+							console.info("success===" + JSON.stringify(res))
+							const data = res.data
+							if (data.success) {
+								resolve(data.phoneNumber)
+							} else {
+								console.info("失败===" + data.msg)
+								uni.showModal({
+									showCancel: false,
+									title: '手机号获取失败',
+									content: `${data.msg}\n，错误码：${data.code}`
+								})
+							}
+
+						},
+						fail: (err) => {
+							console.info("fail===" + JSON.stringify(err))
+							// reject(err)
+						}
+					})
+				});
+				p1.then((number) => {
+					this.phoneNumber = number;
+					uni.setStorageSync(univerifyInfoKey, univerifyInfo)
+					uni.showModal({
+						showCancel: false,
+						title: '登录成功',
+						content: `${number}`,
+						success: ((res) => {
+							if (res.confirm) {
+								console.log('comfirm') //点击确定之后执行的代码
+								uni.switchTab({
+									url: "/pages/list/list"
+								})
+							}
+						})
+					})
+
+				}).catch(err => {
+					uni.showModal({
+						showCancel: false,
+						title: '手机号获取失败',
+						content: `${err.errMsg}，错误码：${err.code}`
+					})
 				})
 			},
-			loading: function(content,time){
+			loading: function(content, time) {
 				uni.showLoading({
 					title: content
 				});
-				setTimeout(()=>{
+				setTimeout(() => {
 					uni.hideLoading();
 					uni.switchTab({
 						url: "/pages/list/list"
 					})
-				},time);
+				}, time);
 			}
 		}
 	}
