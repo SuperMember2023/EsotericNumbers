@@ -1532,3 +1532,25 @@ to {
 .bg-purple-dark[data-v-7d5e07c6] {
   background: #99a9bf;
 }
+.flex-item[data-v-7d5e07c6] {
+  width: 33.3%;
+  height: 6.25rem;
+  text-align: center;
+  line-height: 6.25rem;
+}
+.flex-item-V[data-v-7d5e07c6] {
+  width: 100%;
+  height: 4.6875rem;
+  text-align: center;
+  line-height: 4.6875rem;
+}
+.text[data-v-7d5e07c6] {
+  margin: 0.46875rem 0.0625rem;
+  padding: 0 0.3125rem;
+  background-color: #ebebeb;
+  height: 2.1875rem;
+  line-height: 2.1875rem;
+  text-align: left;
+  color: #777;
+  font-size: 0.8125rem;
+}

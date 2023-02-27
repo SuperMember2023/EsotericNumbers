@@ -68,7 +68,7 @@ if (uni.restoreGlobal) {
   const _sfc_main$o = {
     data() {
       return {
-        title: "\u6B22\u8FCE\u4F7F\u7528",
+        title: "\u767B\u5F55",
         isLogin: false,
         providerList: [],
         univerifyBtnLoading: false,
@@ -10174,9 +10174,9 @@ if (uni.restoreGlobal) {
         shijian: "",
         liuShen: [],
         shenSha: "",
-        fuYaoShow: true,
-        fuYaoCellShow: true,
-        nayinShow: true,
+        fuYaoShow: false,
+        fuYaoCellShow: false,
+        nayinShow: false,
         xinxiuShow: true
       };
     },
@@ -10184,7 +10184,7 @@ if (uni.restoreGlobal) {
     },
     onShow() {
       let userData = getApp().globalData.userData;
-      formatAppLog("log", "at pages/list/list.vue:144", userData);
+      formatAppLog("log", "at pages/list/list.vue:151", userData);
       let date2 = void 0;
       if (userData != void 0) {
         date2 = userData.data ? new Date(userData.data) : new Date();
@@ -10251,6 +10251,7 @@ if (uni.restoreGlobal) {
           let liuqing = zhuGuaGongliuQing[sortdata.getWuXingIndex(wuxin)[1]];
           let ganzhi = bianGuaYao.substring(0, 2);
           let nayin = this.nayinShow ? sortdata.getNayin(ganzhi) : "";
+          nayin = "";
           if (item == "0" || item == "3") {
             this.biangua[i2] = "\u2585&#12288;\u2585 " + liuqing + bianGuaYao + nayin;
           } else {
@@ -10272,15 +10273,15 @@ if (uni.restoreGlobal) {
         const userdata = pn.importObject("userdata");
         try {
           const res = await userdata.sum(1, 2);
-          formatAppLog("log", "at pages/list/list.vue:262", res);
+          formatAppLog("log", "at pages/list/list.vue:270", res);
           this.$u.toast(res);
         } catch (e) {
-          formatAppLog("log", "at pages/list/list.vue:265", e);
+          formatAppLog("log", "at pages/list/list.vue:273", e);
         }
         pn.callFunction({
           name: "data"
         }).then((res) => {
-          formatAppLog("log", "at pages/list/list.vue:270", res);
+          formatAppLog("log", "at pages/list/list.vue:278", res);
         });
       }
     }
@@ -10460,8 +10461,6 @@ if (uni.restoreGlobal) {
                 align: "center"
               }, {
                 default: vue.withCtx(() => [
-                  vue.createCommentVNode(` 				<view v-if="item == '1' || item == '3'" class="demo-layout bg-purple-light">\u2585\u2585\u2585</view>\r
-					<view v-else><view v-html="'\u2585&#12288;\u2585'" class="demo-layout bg-purple-light"></view></view> `),
                   vue.createElementVNode("view", {
                     class: "demo-layout bg-purple",
                     innerHTML: $data.zhugua[index]
@@ -10474,19 +10473,39 @@ if (uni.restoreGlobal) {
                 align: "center"
               }, {
                 default: vue.withCtx(() => [
-                  vue.createCommentVNode(` 			<view v-if="item == '1' || item == '2'" class="demo-layout bg-purple-light">\u2585\u2585\u2585</view>\r
-					<view v-else><view v-html="'\u2585&#12288;\u2585'" class="demo-layout bg-purple-light"></view></view> `),
                   vue.createElementVNode("view", {
                     class: "demo-layout bg-purple",
                     innerHTML: $data.biangua[index]
                   }, null, 8, ["innerHTML"])
                 ]),
                 _: 2
-              }, 1024),
-              vue.createCommentVNode(' 	<u-col span="2">\r\n					<view class="demo-layout bg-purple-light">{{chungua[index]}}</view>\r\n				</u-col> ')
+              }, 1024)
             ]),
             _: 2
           }, 1024)
+        ]);
+      }), 256)),
+      (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($data.userArr, (item, index) => {
+        return vue.openBlock(), vue.createElementBlock("view", { class: "uni-flex uni-row" }, [
+          vue.createElementVNode("view", {
+            class: "text",
+            style: { "width": "80rpx" }
+          }, vue.toDisplayString($data.liuShen[index]), 1),
+          $data.fuYaoCellShow ? (vue.openBlock(), vue.createElementBlock("view", {
+            key: 0,
+            class: "text",
+            style: { "width": "150rpx" }
+          }, vue.toDisplayString($data.fuYao[index]), 1)) : vue.createCommentVNode("v-if", true),
+          vue.createElementVNode("view", {
+            class: "text",
+            style: { "-webkit-flex": "1", "flex": "1" },
+            innerHTML: $data.zhugua[index]
+          }, null, 8, ["innerHTML"]),
+          vue.createElementVNode("view", {
+            class: "text",
+            style: { "-webkit-flex": "1", "flex": "1" },
+            innerHTML: $data.biangua[index]
+          }, null, 8, ["innerHTML"])
         ]);
       }), 256)),
       vue.createVNode(_component_u_gap, {
@@ -10501,8 +10520,7 @@ if (uni.restoreGlobal) {
           right: false,
           "sub-title": "",
           padding: "0 0 5px 10px"
-        }),
-        vue.createCommentVNode(' <u-parse :html="content"></u-parse> ')
+        })
       ]),
       vue.createVNode(_component_u_gap, {
         height: "30",
