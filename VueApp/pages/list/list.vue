@@ -64,29 +64,87 @@
 			<view class="category-line"></view>
 			<view class="category-title">卦象信息</view>
 		</view>
-		<view class="uni-flex uni-row">
-			<view class="title" style="-webkit-flex: 0.3;flex: 0.3;width: 80rpx;"></view>
-			<view class="title" style="-webkit-flex: 0.5;flex: 0.5;width: 170rpx;" v-if="fuYaoCellShow"></view>
-			<view class="title" style="-webkit-flex: 1;flex: 1;" >{{zhuguaName}}</view>
-			<view class="title" style="-webkit-flex: 0.2;flex: 0.2;width: 80rpx;"></view>
-			<view class="title" style="-webkit-flex: 1;flex: 1;" >{{bianguaName}}</view>
+
+		<!-- <u-row gutter="0">
+			<u-col span="1">
+				<view></view>
+			</u-col>
+			<u-col span="2" v-if="fuYaoCellShow">
+				<view></view>
+			</u-col>
+			<u-col span="5">
+				<view>{{zhuguaName}}</view>
+			</u-col>
+			<u-col span="3">
+				<view>{{bianguaName}}</view>
+			</u-col>
+		</u-row> -->
+		<view class="list-item">
+			<view class="list-item-cel">
+				<view class="list-item-cel-view">神</view>
+				<view class="list-item-cel-view" v-if="fuYaoCellShow">【伏卦】</view>
+				<view class="list-item-cel-view">【主卦】</view>
+				<view class="list-item-cel-view">【变卦】</view>
+			</view>
+			<view class="list-item-cel-line"></view>
 		</view>
-		<view class="uni-flex uni-row">
-			<view class="title" style="-webkit-flex: 0.3;flex: 0.3;width: 80rpx;">神</view>
-			<view class="title" style="-webkit-flex: 0.5;flex: 0.5;width: 170rpx;" v-if="fuYaoCellShow">【伏卦】</view>
-			<view class="title" style="-webkit-flex: 1;flex: 1;" >【主卦】</view>
-			<view class="title" style="-webkit-flex: 0.2;flex: 0.2;width: 80rpx;]"></view>
-			<view class="title" style="-webkit-flex: 1;flex: 1;" >【变卦】</view>
+
+		<view v-for="(item, index) in userArr" @click="itemClick" class="list-style">
+			<view class="list-item">
+				<view class="list-item-cel">
+					<view class="list-item-cel-view">{{liuShen[index]}}</view>
+					<view class="list-item-cel-view" v-if="fuYaoCellShow">{{fuYao[index]}}</view>
+					<view class="list-item-cel-view" v-html="zhugua[index]"></view>
+					<view class="list-item-cel-view" v-html="biangua[index]"></view>
+				</view>
+				<view class="list-item-cel-line"></view>
+			</view>
 		</view>
-		<view class="uni-flex uni-row" v-for="(item, index) in userArr">
+
+
+
+		<!-- <u-row gutter="0">
+			<u-col span="1">
+				<view>神</view>
+			</u-col>
+
+			<u-col span="2" v-if="fuYaoCellShow">
+				<view>【伏卦】</view>
+			</u-col>
+
+			<u-col span="5">
+				<view>【主卦】</view>
+			</u-col>
+			<u-col span="3">
+				<view>【变卦】</view>
+			</u-col>
+		</u-row> -->
+
+		<!-- 	<view v-for="(item, index) in userArr">
+			<u-row gutter="0">
+				<u-col span="1">
+					<view class="demo-layout bg-purple">{{liuShen[index]}}</view>
+				</u-col>
+				<u-col span="2" align="center" v-if="fuYaoCellShow">
+					<view class="demo-layout bg-purple">{{fuYao[index]}}</view>
+				</u-col>
+				<u-col span="5" align="center">
+					<view class="demo-layout bg-purple" v-html="zhugua[index]"></view>
+				</u-col>
+				<u-col span="4" align="center">
+					<view class="demo-layout bg-purple" v-html="biangua[index]"></view>
+				</u-col>
+			</u-row>
+		</view> -->
+
+	<!-- 	<view class="uni-flex uni-row" v-for="(item, index) in userArr">
 			<view class="text" style="-webkit-flex: 0.3;flex: 0.3;width: 80rpx;">{{liuShen[index]}}</view>
 			<view class="text" style="-webkit-flex: 0.5;flex: 0.5;width: 170rpx;" v-if="fuYaoCellShow">{{fuYao[index]}}</view>
 			<view class="text" style="-webkit-flex: 1;flex: 1;" v-html="zhugua[index]"></view>
 			<view class="text" style="-webkit-flex: 0.2;flex: 0.2;width: 80rpx;text-align: center;">{{zhuganShiYing[index]}}</view>
 			<view class="text" style="-webkit-flex: 1;flex: 1;text-align: center;" v-html="biangua[index]"></view>
-		</view>
-		
-		<u-gap height="30" bg-color="#FFFFFF" />
+		</view> -->
+
 		<view class="category">
 			<view class="category-line"></view>
 			<view class="category-title">反馈信息</view>
@@ -382,10 +440,12 @@
 </script>
 
 <style lang="scss" scoped>
-	$uni-line-color: #ff0000;
+	$uni-line-color: #DDDDDD;
 	$uni-magin:10rpx;
 	$uni-magin_big:20rpx;
 	$uni-font-size:28rpx;
+	$uni-margin-top:15rpx;
+	// $uni-font-color:#d3dce6;
 
 	.u-demo {
 		display: flex;
@@ -465,6 +525,7 @@
 		flex-direction: row;
 		// background: rebeccapurple;
 		align-content: center;
+		margin-top: $uni-magin;
 
 		.category-line {
 			width: 5rpx;
@@ -529,5 +590,41 @@
 		margin-top: $uni-magin_big;
 		margin-bottom: $uni-magin_big;
 		border: 1rpx solid red;
+	}
+
+	.list-item {
+		// background: #FFFFFF;
+		display: flex;
+		flex-direction: column;
+		.list-item-cel {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-around;
+			height: 70rpx;
+
+			.list-item-cel-view {
+				width: 100%;
+				overflow: hidden;
+				/*隐藏*/
+				white-space: nowrap;
+				/*不换行*/
+				text-overflow: ellipsis;
+				align-self: center;
+			}
+		}
+	}
+	.list-item-cel-line {
+		height: 1px;
+		width: 100%;
+		background: #F5F5F5;//$uni-line-color;
+	}
+	 /* 奇数行的样式 */
+	.list-style:nth-child(odd)>.list-item {
+	   background: #fff;
+	}
+	
+	/* 偶数行的样式 */
+	.list-style:nth-child(even)>.list-item {
+	  background: #F5F5F5;
 	}
 </style>
