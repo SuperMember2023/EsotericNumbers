@@ -26,59 +26,27 @@
 		<u-gap height="20" bg-color="#FFFFFF"></u-gap>
 		<u-section class="mb-10" title="卦象信息" type="line"  :right="false" sub-title="" padding="0 0 5px 10px" />
 		
-		<u-row gutter="0">
-			<u-col span="1" >
-				<view ></view>
-			</u-col>
-			<u-col span="2" v-if="fuYaoCellShow">
-				<view ></view>
-			</u-col>
-			<u-col span="5">
-				<view >{{zhuguaName}}</view>
-			</u-col>
-			<u-col span="3">
-				<view >{{bianguaName}}</view>
-			</u-col>
-		</u-row>
-		<u-row gutter="0">
-			<u-col span="1">
-				<view >神</view>
-			</u-col>
 		
-			<u-col span="2" v-if="fuYaoCellShow">
-				<view >【伏卦】</view>
-			</u-col>
-	
-			<u-col span="5">
-				<view >【主卦】</view>
-			</u-col>
-			<u-col span="3">
-				<view >【变卦】</view>
-			</u-col>
-		</u-row>
-
-		<view v-for="(item, index) in userArr">		
-			<u-row gutter="0">
-				<u-col span="1">
-					<view class="demo-layout bg-purple">{{liuShen[index]}}</view>
-				</u-col>
-				<u-col span="2" align="center" v-if="fuYaoCellShow">
-					<view class="demo-layout bg-purple" >{{fuYao[index]}}</view>
-				</u-col>
-				<u-col span="5" align="center">
-					<view class="demo-layout bg-purple" v-html="zhugua[index]"></view>
-				</u-col>
-				<u-col span="4" align="center">
-					<view class="demo-layout bg-purple" v-html="biangua[index]"></view>
-				</u-col>
-			</u-row>
+		<view class="uni-flex uni-row">
+			<view class="title" style="-webkit-flex: 0.3;flex: 0.3;width: 80rpx;"></view>
+			<view class="title" style="-webkit-flex: 0.5;flex: 0.5;width: 170rpx;" v-if="fuYaoCellShow"></view>
+			<view class="title" style="-webkit-flex: 1;flex: 1;" >{{zhuguaName}}</view>
+			<view class="title" style="-webkit-flex: 0.2;flex: 0.2;width: 80rpx;"></view>
+			<view class="title" style="-webkit-flex: 1;flex: 1;" >{{bianguaName}}</view>
 		</view>
-		
+		<view class="uni-flex uni-row">
+			<view class="title" style="-webkit-flex: 0.3;flex: 0.3;width: 80rpx;">神</view>
+			<view class="title" style="-webkit-flex: 0.5;flex: 0.5;width: 170rpx;" v-if="fuYaoCellShow">【伏卦】</view>
+			<view class="title" style="-webkit-flex: 1;flex: 1;" >【主卦】</view>
+			<view class="title" style="-webkit-flex: 0.2;flex: 0.2;width: 80rpx;]"></view>
+			<view class="title" style="-webkit-flex: 1;flex: 1;" >【变卦】</view>
+		</view>
 		<view class="uni-flex uni-row" v-for="(item, index) in userArr">
-			<view class="text" style="width: 80rpx;">{{liuShen[index]}}</view>
-			<view class="text" style="width: 150rpx;" v-if="fuYaoCellShow">{{fuYao[index]}}</view>
+			<view class="text" style="-webkit-flex: 0.3;flex: 0.3;width: 80rpx;">{{liuShen[index]}}</view>
+			<view class="text" style="-webkit-flex: 0.5;flex: 0.5;width: 170rpx;" v-if="fuYaoCellShow">{{fuYao[index]}}</view>
 			<view class="text" style="-webkit-flex: 1;flex: 1;" v-html="zhugua[index]"></view>
-			<view class="text" style="-webkit-flex: 1;flex: 1;" v-html="biangua[index]"></view>
+			<view class="text" style="-webkit-flex: 0.2;flex: 0.2;width: 80rpx;text-align: center;">{{zhuganShiYing[index]}}</view>
+			<view class="text" style="-webkit-flex: 1;flex: 1;text-align: center;" v-html="biangua[index]"></view>
 		</view>
 		<u-gap height="20" bg-color="#FFFFFF"></u-gap>
 		<view class="u-content">
@@ -116,9 +84,10 @@
 				bianguaName:'',
 				zhugua:['','','','','',''],
 				biangua:['','','','','',''],
-				zhuganShiYing:[],
+				zhuganShiYing:['','','','',''],
 				bianganShiYing:[],
 				fuYao:['','','','','',''],
+				shiyingdong:['','','','','',''],
 				content: `<p>露从今夜白，月是故乡明</p>
 									<img src="https://cdn.uviewui.com/uview/swiper/2.jpg" />
 								`,
@@ -128,27 +97,41 @@
 				shijian:'',
 				liuShen:[],
 				shenSha:'',
-/* #ifdef H5 */
-				fuYaoShow:false,
-				fuYaoCellShow:false,
-				nayinShow:false,
-/* #else */					
-				fuYaoShow:false,
-				fuYaoCellShow:false,
-				nayinShow:false,
-/* #endif */
-			
+				
+				fuYaoShow:true,
+				fuYaoCellShow:true,
+				nayinShow:true, 				
+		
 
 				xinxiuShow:true,
+				
+				textAlign:'left',
 			}
 		},
 		
 		onLoad(option) {
-			
+			let platform = uni.getSystemInfoSync().platform
+			console.log("platform:"+platform)
+			switch(platform){
+			    case 'android':
+				   this.fuYaoShow = false
+				   this.fuYaoCellShow = false
+				   this.nayinShow = false
+			       break;
+			    case 'ios':
+				   this.fuYaoShow = false
+				   this.fuYaoCellShow = false
+				   this.nayinShow = false
+			       break;
+			    default:
+				   this.fuYaoShow = true
+				   this.fuYaoCellShow = true
+				   this.nayinShow = true
+			       break;
+			}
 		},
 		onShow(){
 			let userData = getApp().globalData.userData
-			console.log(userData)
 			let date = undefined
 			if(userData != undefined)
 			{
@@ -220,17 +203,19 @@
 					let nayin = this.nayinShow?sortdata.getNayin(ganzhi):''
 					if(item == '0' || item == '2')
 					{
-						this.zhugua[i] = '▅&#12288;▅ ' + liuqing+zhuGuaYao +nayin +' '+ this.zhuganShiYing[i]+(item == '2'?' X':'');
+						this.zhugua[i] = '▅&#12288;▅ ' + liuqing+zhuGuaYao +nayin 
+						this.zhuganShiYing[i] =this.zhuganShiYing[i] + (item == '2'?'X':'');
 					}else
 					{
-						this.zhugua[i] = '▅▅▅ ' + liuqing+zhuGuaYao +nayin+' '+ this.zhuganShiYing[i]+(item == '3'?' 〇':'');
+						this.zhugua[i] = '▅▅▅ ' + liuqing+zhuGuaYao +nayin
+						this.zhuganShiYing[i]=this.zhuganShiYing[i] + (item == '3'?'〇':'');
 					}
 				}
 				
 				let bianguanajia = sortdata.getBianGuaNajia(this.userArr)
 				
 				
-				//处理主卦
+				//处理变卦
 				for(let i=0;i<this.userArr.length;i++)
 				{
 					let item = this.userArr.charAt(i);
@@ -328,13 +313,23 @@
 		line-height: 150rpx;
 	}
 	.text {
-		margin: 15rpx 2rpx;
-		padding: 0 10rpx;
+		margin: 0rpx 0rpx;
+		padding: 0 5rpx;
 		background-color: #ebebeb;
+		height: 62rpx;
+		line-height: 62rpx;
+		text-align: center;
+		color: #000;
+		font-size: 30rpx;
+	}
+	.title {
+		margin: 1rpx 2rpx;
+		padding: 10rpx 5rpx;
+		background-color: #d3dce6;
 		height: 70rpx;
 		line-height: 70rpx;
-		text-align: left;
+		text-align: center;
 		color: #777;
-		font-size: 26rpx;
+		font-size: 32rpx;
 	}
 </style>
