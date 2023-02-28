@@ -12,9 +12,11 @@
 
 		<view class="quanyao">
 			<view class="btn-box">
-				<u-input v-model="inputValue" placeholder="请输入卦序号:102322" placeholder-class="color:#4a4a4a" />
-				<u-button @click="btnClick('A3')" timer-id="A">查询</u-button>
+				<!-- <u-input v-model="inputValue" placeholder="请输入卦序号:102322" placeholder-class="color:#4a4a4a" />
+				<u-button @click="btnClick('A3')" timer-id="A">查询</u-button> -->
 				<!-- <u-button @click="testco()">请求云对象的方法</u-button> -->
+				<input class="input-default" placeholder="请输入卦序号:102322" v-model="inputValue" placeholder-class="color:#4a4a4a" />
+				<view class="btn-default" @click="btnClick('A3')">查询</view>
 			</view>
 			<u-line margin="10rpx"></u-line>
 		</view>
@@ -137,14 +139,14 @@
 			</u-row>
 		</view> -->
 
-	<!-- 	<view class="uni-flex uni-row" v-for="(item, index) in userArr">
+		<!-- 	<view class="uni-flex uni-row" v-for="(item, index) in userArr">
 			<view class="text" style="-webkit-flex: 0.3;flex: 0.3;width: 80rpx;">{{liuShen[index]}}</view>
 			<view class="text" style="-webkit-flex: 0.5;flex: 0.5;width: 170rpx;" v-if="fuYaoCellShow">{{fuYao[index]}}</view>
 			<view class="text" style="-webkit-flex: 1;flex: 1;" v-html="zhugua[index]"></view>
 			<view class="text" style="-webkit-flex: 0.2;flex: 0.2;width: 80rpx;text-align: center;">{{zhuganShiYing[index]}}</view>
 			<view class="text" style="-webkit-flex: 1;flex: 1;text-align: center;" v-html="biangua[index]"></view>
 		</view> -->
-
+		<u-gap height="20" bg-color="#FFFFFF"></u-gap>
 		<view class="category">
 			<view class="category-line"></view>
 			<view class="category-title">反馈信息</view>
@@ -445,6 +447,8 @@
 	$uni-magin_big:20rpx;
 	$uni-font-size:28rpx;
 	$uni-margin-top:15rpx;
+	$uni-item-ceil-height:70rpx;
+	$uni-button-height:80rpx;
 	// $uni-font-color:#d3dce6;
 
 	.u-demo {
@@ -453,10 +457,7 @@
 		padding: $uni-magin_big $uni-magin_big;
 	}
 
-	.btn-box {
-		display: flex;
-		margin-top: $uni-magin_big;
-	}
+	
 
 	.u-row {
 		margin: $uni-magin 0;
@@ -519,6 +520,32 @@
 	}
 
 	/**全伏爻*/
+	.btn-box {
+		display: flex;
+		flex-direction: row;
+		margin-top: $uni-magin_big;
+	}
+	.input-default{
+		height: $uni-button-height;
+		flex: 4;
+		
+	}
+	.btn-default {
+		padding: 10px 20px;
+		text-align: center;
+		text-decoration: none;
+		display: inline-block;
+		font-size: $uni-font-size;
+		margin: 4px 2px;
+		background-color: #e7e7e7;
+		color: black;
+		border-radius: 5px;
+		flex: 1;
+	}
+	.btn-default:active {
+		background-color: #F4F0F0;
+	}
+
 	.category {
 		/**分类*/
 		display: flex;
@@ -541,18 +568,6 @@
 			font-size: $uni-font-size;
 		}
 	}
-
-	// .category::before {
-	// 	content: "";
-	// 	width: 5rpx;
-	// 	height: 32rpx;
-	// 	position: absolute;
-	// 	background: black;
-
-	// }
-
-
-
 	.quanyao {
 		display: flex;
 		flex-direction: column;
@@ -596,11 +611,12 @@
 		// background: #FFFFFF;
 		display: flex;
 		flex-direction: column;
+
 		.list-item-cel {
 			display: flex;
 			flex-direction: row;
 			justify-content: space-around;
-			height: 70rpx;
+			height: $uni-item-ceil-height;
 
 			.list-item-cel-view {
 				width: 100%;
@@ -613,18 +629,20 @@
 			}
 		}
 	}
+
 	.list-item-cel-line {
 		height: 1px;
 		width: 100%;
-		background: #F5F5F5;//$uni-line-color;
+		background: #F5F5F5; //$uni-line-color;
 	}
-	 /* 奇数行的样式 */
+
+	/* 奇数行的样式 */
 	.list-style:nth-child(odd)>.list-item {
-	   background: #fff;
+		background: #fff;
 	}
-	
+
 	/* 偶数行的样式 */
 	.list-style:nth-child(even)>.list-item {
-	  background: #F5F5F5;
+		background: #F5F5F5;
 	}
 </style>
