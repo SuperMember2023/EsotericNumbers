@@ -20,21 +20,21 @@
 		</view>
 		<view class="quanyao">
 			<view class="lable-view">
-				<view class="title">时间：</view>
+				<view class="lable-view-title">时间：</view>
 				<view v-html="shijian"></view>
 			</view>
 			<u-line margin="10rpx"></u-line>
 		</view>
 		<view class="quanyao">
 			<view class="lable-view">
-				<view class="title">干支：</view>
+				<view class="lable-view-title">干支：</view>
 				<view v-html="sizhu"></view>
 			</view>
 			<u-line margin="10rpx"></u-line>
 		</view>
 		<view class="quanyao">
 			<view class="lable-view">
-				<view class="title">神煞：</view>
+				<view class="lable-view-title">神煞：</view>
 				<view v-html="shenSha"></view>
 			</view>
 			<u-line margin="10rpx"></u-line>
@@ -47,7 +47,7 @@
 		</view> -->
 		<view class="quanyao">
 			<view class="lable-view">
-				<view class="title">神煞：</view>
+			<!-- 	<view class="lable-view-title"></view> -->
 				<checkbox-group @change="checkboxChange" class="check-box">
 					<label v-for="item in items" :key="item.value">
 						<checkbox :value="item.value" :checked="item.checked" style="transform:scale(0.7)" />
@@ -114,17 +114,19 @@
 
 		<view class="uni-flex uni-row" v-for="(item, index) in userArr">
 			<view class="text" style="-webkit-flex: 0.3;flex: 0.3;width: 80rpx;">{{liuShen[index]}}</view>
-			<view class="text" style="-webkit-flex: 0.5;flex: 0.5;width: 170rpx;" v-if="fuYaoCellShow">{{fuYao[index]}}</view>
+			<view class="text" style="-webkit-flex: 0.5;flex: 0.5;width: 170rpx;" v-if="fuYaoCellShow">{{fuYao[index]}}
+			</view>
 			<view class="text" style="-webkit-flex: 1;flex: 1;" v-html="zhugua[index]"></view>
-			<view class="text" style="-webkit-flex: 0.2;flex: 0.2;width: 80rpx;text-align: center;">{{zhuganShiYing[index]}}</view>
+			<view class="text" style="-webkit-flex: 0.2;flex: 0.2;width: 80rpx;text-align: center;">
+				{{zhuganShiYing[index]}}</view>
 			<view class="text" style="-webkit-flex: 1;flex: 1;text-align: center;" v-html="biangua[index]"></view>
 		</view>
-		
+
 		<view class="category">
 			<view class="category-line"></view>
 			<view class="category-title">卦象信息</view>
 		</view>
-	<!-- 	<u-gap height="20" bg-color="#FFFFFF"></u-gap>
+		<!-- 	<u-gap height="20" bg-color="#FFFFFF"></u-gap>
 		<view class="u-content">
 			<u-section class="mb-10" title="反馈信息" type="line" :right="false" sub-title="" padding="0 0 5px 10px" />
 		</view> -->
@@ -155,37 +157,37 @@
 					}
 				],
 				current: 0,
-				userArr:"111111",
-				inputValue:"",				
-				seen:true,
-				chungua:[],
-				najia:['','','','','',''],
-				zhuguaName:'',
-				bianguaName:'',
-				zhugua:['','','','','',''],
-				biangua:['','','','','',''],
-				zhuganShiYing:['','','','',''],
-				bianganShiYing:[],
-				fuYao:['','','','','',''],
-				shiyingdong:['','','','','',''],
+				userArr: "111111",
+				inputValue: "",
+				seen: true,
+				chungua: [],
+				najia: ['', '', '', '', '', ''],
+				zhuguaName: '',
+				bianguaName: '',
+				zhugua: ['', '', '', '', '', ''],
+				biangua: ['', '', '', '', '', ''],
+				zhuganShiYing: ['', '', '', '', ''],
+				bianganShiYing: [],
+				fuYao: ['', '', '', '', '', ''],
+				shiyingdong: ['', '', '', '', '', ''],
 				content: `<p>露从今夜白，月是故乡明</p>
 									<img src="https://cdn.uviewui.com/uview/swiper/2.jpg" />
 								`,
-				
-				//四柱信息
-				sizhu:'',
-				shijian:'',
-				liuShen:[],
-				shenSha:'',
-				
-				fuYaoShow:true,
-				fuYaoCellShow:true,
-				nayinShow:true, 				
-		
 
-				xinxiuShow:true,
-				
-				textAlign:'left',
+				//四柱信息
+				sizhu: '',
+				shijian: '',
+				liuShen: [],
+				shenSha: '',
+
+				fuYaoShow: true,
+				fuYaoCellShow: true,
+				nayinShow: true,
+
+
+				xinxiuShow: true,
+
+				textAlign: 'left',
 				userArr: "111111",
 				inputValue: "",
 				seen: true,
@@ -225,33 +227,32 @@
 		},
 
 		onLoad(option) {
-			let platform = uni.getSystemInfoSync().platform
-			console.log("platform:"+platform)
-			switch(platform){
-			    case 'android':
-				   this.fuYaoShow = false
-				   this.fuYaoCellShow = false
-				   this.nayinShow = false
-			       break;
-			    case 'ios':
-				   this.fuYaoShow = false
-				   this.fuYaoCellShow = false
-				   this.nayinShow = false
-			       break;
-			    default:
-				   this.fuYaoShow = true
-				   this.fuYaoCellShow = true
-				   this.nayinShow = true
-			       break;
-			}
 
+			let platform = uni.getSystemInfoSync().platform
+			console.log("platform:" + platform)
+			switch (platform) {
+				case 'android':
+					this.fuYaoShow = false
+					this.fuYaoCellShow = false
+					this.nayinShow = false
+					break;
+				case 'ios':
+					this.fuYaoShow = false
+					this.fuYaoCellShow = false
+					this.nayinShow = false
+					break;
+				default:
+					this.fuYaoShow = true
+					this.fuYaoCellShow = true
+					this.nayinShow = true
+					break;
+			}
 		},
 		onShow() {
 			let userData = getApp().globalData.userData
-
+			console.log(userData)
 			let date = undefined
 			if (userData != undefined) {
-				console.log(userData)
 				date = userData.data ? new Date(userData.data) : new Date()
 				this.userArr = userData.name
 				this.load()
@@ -261,7 +262,7 @@
 			// = userData&&userData.data?new Date(userData.data):new Date()
 			var lunar = Lunar.fromDate(date);
 			var eightChar = lunar.getEightChar();
-			//'干支：' +
+			// '干支：' +
 			this.sizhu = lunar.getYearInGanZhiByLiChun() + '&#12288;' + lunar.getMonthInGanZhiExact() +
 				'&#12288;' + lunar.getDayInGanZhiExact() + '&#12288;' + lunar.getTimeInGanZhi() + ' 空亡：' + lunar
 				.getDayXunKong();
@@ -278,14 +279,13 @@
 			let second = date.getSeconds()
 			second >= 9 ? second : second = '0' + second
 			//'时间：' +
-			this.shijian = year + '-' + month + '-' + day + "  " + hour + ":" + minute + '【' + lunar
+			this.shijian =  year + '-' + month + '-' + day + "  " + hour + ":" + minute + '【' + lunar
 				.getMonthInChinese() + '月' + lunar.getDayInChinese() + '】'
 
 			this.liuShen = sortdata.getLiuShen(lunar.getDayGanExact())
-			// 神煞：
-			this.shenSha = '贵人:' + sortdata.getTianGanShenSha(lunar.getDayGanExact())[0] + "&#12288;" + ' 文昌:' + sortdata
-				.getTianGanShenSha(lunar.getDayGanExact())[1] + "&#12288;" + ' 天喜:' + sortdata.getDiZhiShenSha(lunar
-					.getYearZhiExact())
+			//神煞：
+			this.shenSha = '贵人:' + sortdata.getTianGanShenSha(lunar.getDayGanExact())[0]  + '&#12288;'+ ' 文昌:' + sortdata
+				.getTianGanShenSha(lunar.getDayGanExact())[1]  + '&#12288;'+ ' 天喜:' + sortdata.getDiZhiShenSha(lunar.getYearZhiExact())
 		},
 		methods: {
 			load() {
@@ -318,38 +318,27 @@
 						let fuYaoWuXin = sortdata.getWuXingIndex(zhuFuYao[1])
 						this.fuYao[i] = zhuGuaGongliuQing[fuYaoWuXin[1]] + tempFuYao[i]
 					}
-						
-					let ganzhi = zhuGuaYao.substring(0,2)
-					let nayin = this.nayinShow?sortdata.getNayin(ganzhi):''
-					if(item == '0' || item == '2')
-					{
-						this.zhugua[i] = '▅&#12288;▅ ' + liuqing+zhuGuaYao +nayin 
-						this.zhuganShiYing[i] =this.zhuganShiYing[i] + (item == '2'?'X':'');
-					}else
-					{
-						this.zhugua[i] = '▅▅▅ ' + liuqing+zhuGuaYao +nayin
-						this.zhuganShiYing[i]=this.zhuganShiYing[i] + (item == '3'?'〇':'');
 
 					let ganzhi = zhuGuaYao.substring(0, 2)
 					let nayin = this.nayinShow ? sortdata.getNayin(ganzhi) : ''
 					if (item == '0' || item == '2') {
 						this.zhugua[i] = '▅&#12288;▅ ' + liuqing + zhuGuaYao + nayin + ' ' + this.zhuganShiYing[i] + (
 							item == '2' ? ' X' : '');
+						this.zhugua[i] = '▅&#12288;▅ ' + liuqing + zhuGuaYao + nayin
+						this.zhuganShiYing[i] = this.zhuganShiYing[i] + (item == '2' ? 'X' : '');
 					} else {
 						this.zhugua[i] = '▅▅▅ ' + liuqing + zhuGuaYao + nayin + ' ' + this.zhuganShiYing[i] + (item ==
 							'3' ? ' 〇' : '');
+						this.zhugua[i] = '▅▅▅ ' + liuqing + zhuGuaYao + nayin
+						this.zhuganShiYing[i] = this.zhuganShiYing[i] + (item == '3' ? '〇' : '');
 					}
 				}
 
 				let bianguanajia = sortdata.getBianGuaNajia(this.userArr)
-				
-				
-				//处理变卦
-				for(let i=0;i<this.userArr.length;i++)
-				{
 
 
 				//处理主卦
+				//处理变卦
 				for (let i = 0; i < this.userArr.length; i++) {
 					let item = this.userArr.charAt(i);
 					let bianGuaYao = bianguanajia[i]
@@ -391,35 +380,6 @@
 				}).then(res => {
 					console.log(res)
 				})
-			},
-			checkboxChange: function(e) {
-				var items = this.items,
-					values = e.detail.value;
-				// console.info("values===" + values)
-				if (values.indexOf('fuYaoShow') >= 0) {
-					this.fuYaoShow = true;
-				} else {
-					this.fuYaoShow = false;
-				}
-				if (values.indexOf('fuYaoCellShow') >= 0) {
-					this.fuYaoCellShow = true;
-				} else {
-					this.fuYaoCellShow = false;
-				}
-				if (values.indexOf('nayinShow') >= 0) {
-					this.nayinShow = true;
-				} else {
-					this.nayinShow = false;
-				}
-				// console.info("this.fuYaoCellShow:"+this.fuYaoCellShow+" this.fuYaoShow:"+this.fuYaoShow);
-				for (var i = 0, lenI = items.length; i < lenI; ++i) {
-					const item = items[i]
-					if (values.indexOf(item.value) >= 0) {
-						this.$set(item, 'checked', true)
-					} else {
-						this.$set(item, 'checked', false)
-					}
-				}
 			}
 
 		}
@@ -491,6 +451,7 @@
 		color: #000;
 		font-size: 30rpx;
 	}
+
 	.title {
 		margin: 1rpx 2rpx;
 		padding: 10rpx 5rpx;
@@ -546,13 +507,14 @@
 		margin-bottom: $uni-magin;
 		font-size: $uni-font-size;
 		// background-color: #99a9bf;
+		// word-break: keep-all;
 	}
 
 	.lable-view {
 		display: flex;
 		flex-direction: row;
 
-		.title {
+		.lable-view-title {
 			font-weight: bold;
 			font-size: $uni-font-size;
 			// background-color: #99a9bf;
