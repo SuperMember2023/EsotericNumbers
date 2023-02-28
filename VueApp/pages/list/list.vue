@@ -83,10 +83,21 @@
 		</u-row> -->
 		<view class="list-item">
 			<view class="list-item-cel">
-				<view class="list-item-cel-view">神</view>
-				<view class="list-item-cel-view" v-if="fuYaoCellShow">【伏卦】</view>
-				<view class="list-item-cel-view">【主卦】</view>
-				<view class="list-item-cel-view">【变卦】</view>
+				<view class="list-item-cel-view" style="-webkit-flex: 0.3;flex: 0.3;"></view>
+				<view class="list-item-cel-view" style="-webkit-flex: 0.5;flex: 0.5;" v-if="fuYaoCellShow"></view>
+				<view class="list-item-cel-view" style="-webkit-flex: 1;flex: 1;" >{{zhuguaName}}</view>
+				<view class="list-item-cel-view" style="-webkit-flex: 0.3;flex: 0.3;"></view>
+				<view class="list-item-cel-view" style="-webkit-flex: 1;flex: 1;" >{{bianguaName}}</view>
+			</view>
+			<view class="list-item-cel-line"></view>
+		</view>
+		<view class="list-item">
+			<view class="list-item-cel">
+				<view class="list-item-cel-view" style="-webkit-flex: 0.3;flex: 0.3;">神</view>
+				<view class="list-item-cel-view" style="-webkit-flex: 0.5;flex: 0.5;" v-if="fuYaoCellShow">【伏卦】</view>
+				<view class="list-item-cel-view" style="-webkit-flex: 1;flex: 1;" >【主卦】</view>
+				<view class="list-item-cel-view" style="-webkit-flex: 0.3;flex: 0.3;"></view>
+				<view class="list-item-cel-view" style="-webkit-flex: 1;flex: 1;" >【变卦】</view>
 			</view>
 			<view class="list-item-cel-line"></view>
 		</view>
@@ -94,10 +105,11 @@
 		<view v-for="(item, index) in userArr" @click="itemClick" class="list-style">
 			<view class="list-item">
 				<view class="list-item-cel">
-					<view class="list-item-cel-view">{{liuShen[index]}}</view>
-					<view class="list-item-cel-view" v-if="fuYaoCellShow">{{fuYao[index]}}</view>
-					<view class="list-item-cel-view" v-html="zhugua[index]"></view>
-					<view class="list-item-cel-view" v-html="biangua[index]"></view>
+					<view class="list-item-cel-view" style="-webkit-flex: 0.3;flex: 0.3;">{{liuShen[index]}}</view>
+					<view class="list-item-cel-view" style="-webkit-flex: 0.5;flex: 0.5;" v-if="fuYaoCellShow">{{fuYao[index]}}</view>
+					<view class="list-item-cel-view" style="-webkit-flex: 1;flex: 1;" v-html="zhugua[index]"></view>
+					<view class="list-item-cel-view" style="-webkit-flex: 0.3;flex: 0.3;">{{zhuganShiYing[index]}}</view>
+					<view class="list-item-cel-view" style="-webkit-flex: 1;flex: 1;" v-html="biangua[index]"></view>
 				</view>
 				<view class="list-item-cel-line"></view>
 			</view>
@@ -447,7 +459,7 @@
 	$uni-magin_big:20rpx;
 	$uni-font-size:28rpx;
 	$uni-margin-top:15rpx;
-	$uni-item-ceil-height:70rpx;
+	$uni-item-ceil-height:60rpx;
 	$uni-button-height:80rpx;
 	// $uni-font-color:#d3dce6;
 
@@ -614,18 +626,25 @@
 
 		.list-item-cel {
 			display: flex;
-			flex-direction: row;
+			// flex-direction: row;
 			justify-content: space-around;
 			height: $uni-item-ceil-height;
 
 			.list-item-cel-view {
-				width: 100%;
+				// width: 100%;
+				// -webkit-flex: 1;
+				flex: 1;
+				// flex: 0.2;
 				overflow: hidden;
 				/*隐藏*/
 				white-space: nowrap;
 				/*不换行*/
 				text-overflow: ellipsis;
 				align-self: center;
+				// margin-left: 5rpx;
+				text-align: center;
+				//padding-left: 5;
+				// background-color: #777;
 			}
 		}
 	}
