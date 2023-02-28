@@ -47,7 +47,7 @@
 		</view> -->
 		<view class="quanyao">
 			<view class="lable-view">
-			<!-- 	<view class="lable-view-title"></view> -->
+				<!-- 	<view class="lable-view-title"></view> -->
 				<checkbox-group @change="checkboxChange" class="check-box">
 					<label v-for="item in items" :key="item.value">
 						<checkbox :value="item.value" :checked="item.checked" style="transform:scale(0.7)" />
@@ -118,13 +118,14 @@
 			</view>
 			<view class="text" style="-webkit-flex: 1;flex: 1;" v-html="zhugua[index]"></view>
 			<view class="text" style="-webkit-flex: 0.2;flex: 0.2;width: 80rpx;text-align: center;">
-				{{zhuganShiYing[index]}}</view>
+				{{zhuganShiYing[index]}}
+			</view>
 			<view class="text" style="-webkit-flex: 1;flex: 1;text-align: center;" v-html="biangua[index]"></view>
 		</view>
 
 		<view class="category">
 			<view class="category-line"></view>
-			<view class="category-title">卦象信息</view>
+			<view class="category-title">反馈信息</view>
 		</view>
 		<!-- 	<u-gap height="20" bg-color="#FFFFFF"></u-gap>
 		<view class="u-content">
@@ -279,13 +280,14 @@
 			let second = date.getSeconds()
 			second >= 9 ? second : second = '0' + second
 			//'时间：' +
-			this.shijian =  year + '-' + month + '-' + day + "  " + hour + ":" + minute + '【' + lunar
+			this.shijian = year + '-' + month + '-' + day + "  " + hour + ":" + minute + '【' + lunar
 				.getMonthInChinese() + '月' + lunar.getDayInChinese() + '】'
 
 			this.liuShen = sortdata.getLiuShen(lunar.getDayGanExact())
 			//神煞：
-			this.shenSha = '贵人:' + sortdata.getTianGanShenSha(lunar.getDayGanExact())[0]  + '&#12288;'+ ' 文昌:' + sortdata
-				.getTianGanShenSha(lunar.getDayGanExact())[1]  + '&#12288;'+ ' 天喜:' + sortdata.getDiZhiShenSha(lunar.getYearZhiExact())
+			this.shenSha = '贵人:' + sortdata.getTianGanShenSha(lunar.getDayGanExact())[0] + '&#12288;' + ' 文昌:' + sortdata
+				.getTianGanShenSha(lunar.getDayGanExact())[1] + '&#12288;' + ' 天喜:' + sortdata.getDiZhiShenSha(lunar
+					.getYearZhiExact())
 		},
 		methods: {
 			load() {
@@ -380,6 +382,35 @@
 				}).then(res => {
 					console.log(res)
 				})
+			},
+			checkboxChange: function(e) {
+				var items = this.items,
+					values = e.detail.value;
+				// console.info("values===" + values)
+				if (values.indexOf('fuYaoShow') >= 0) {
+					this.fuYaoShow = true;
+				} else {
+					this.fuYaoShow = false;
+				}
+				if (values.indexOf('fuYaoCellShow') >= 0) {
+					this.fuYaoCellShow = true;
+				} else {
+					this.fuYaoCellShow = false;
+				}
+				if (values.indexOf('nayinShow') >= 0) {
+					this.nayinShow = true;
+				} else {
+					this.nayinShow = false;
+				}
+				// console.info("this.fuYaoCellShow:"+this.fuYaoCellShow+" this.fuYaoShow:"+this.fuYaoShow);
+				for (var i = 0, lenI = items.length; i < lenI; ++i) {
+					const item = items[i]
+					if (values.indexOf(item.value) >= 0) {
+						this.$set(item, 'checked', true)
+					} else {
+						this.$set(item, 'checked', false)
+					}
+				}
 			}
 
 		}
