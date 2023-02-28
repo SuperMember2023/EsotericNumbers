@@ -64,65 +64,29 @@
 			<view class="category-line"></view>
 			<view class="category-title">卦象信息</view>
 		</view>
-		<u-row gutter="0">
-			<u-col span="1">
-				<view></view>
-			</u-col>
-			<u-col span="2" v-if="fuYaoCellShow">
-				<view></view>
-			</u-col>
-			<u-col span="5">
-				<view>{{zhuguaName}}</view>
-			</u-col>
-			<u-col span="3">
-				<view>{{bianguaName}}</view>
-			</u-col>
-		</u-row>
-		<u-row gutter="0">
-			<u-col span="1">
-				<view>神</view>
-			</u-col>
-
-			<u-col span="2" v-if="fuYaoCellShow">
-				<view>【伏卦】</view>
-			</u-col>
-
-			<u-col span="5">
-				<view>【主卦】</view>
-			</u-col>
-			<u-col span="3">
-				<view>【变卦】</view>
-			</u-col>
-		</u-row>
-
-		<view v-for="(item, index) in userArr">
-			<u-row gutter="0">
-				<u-col span="1">
-					<view class="demo-layout bg-purple">{{liuShen[index]}}</view>
-				</u-col>
-				<u-col span="2" align="center" v-if="fuYaoCellShow">
-					<view class="demo-layout bg-purple">{{fuYao[index]}}</view>
-				</u-col>
-				<u-col span="5" align="center">
-					<view class="demo-layout bg-purple" v-html="zhugua[index]"></view>
-				</u-col>
-				<u-col span="4" align="center">
-					<view class="demo-layout bg-purple" v-html="biangua[index]"></view>
-				</u-col>
-			</u-row>
+		<view class="uni-flex uni-row">
+			<view class="title" style="-webkit-flex: 0.3;flex: 0.3;width: 80rpx;"></view>
+			<view class="title" style="-webkit-flex: 0.5;flex: 0.5;width: 170rpx;" v-if="fuYaoCellShow"></view>
+			<view class="title" style="-webkit-flex: 1;flex: 1;" >{{zhuguaName}}</view>
+			<view class="title" style="-webkit-flex: 0.2;flex: 0.2;width: 80rpx;"></view>
+			<view class="title" style="-webkit-flex: 1;flex: 1;" >{{bianguaName}}</view>
 		</view>
-
+		<view class="uni-flex uni-row">
+			<view class="title" style="-webkit-flex: 0.3;flex: 0.3;width: 80rpx;">神</view>
+			<view class="title" style="-webkit-flex: 0.5;flex: 0.5;width: 170rpx;" v-if="fuYaoCellShow">【伏卦】</view>
+			<view class="title" style="-webkit-flex: 1;flex: 1;" >【主卦】</view>
+			<view class="title" style="-webkit-flex: 0.2;flex: 0.2;width: 80rpx;]"></view>
+			<view class="title" style="-webkit-flex: 1;flex: 1;" >【变卦】</view>
+		</view>
 		<view class="uni-flex uni-row" v-for="(item, index) in userArr">
 			<view class="text" style="-webkit-flex: 0.3;flex: 0.3;width: 80rpx;">{{liuShen[index]}}</view>
-			<view class="text" style="-webkit-flex: 0.5;flex: 0.5;width: 170rpx;" v-if="fuYaoCellShow">{{fuYao[index]}}
-			</view>
+			<view class="text" style="-webkit-flex: 0.5;flex: 0.5;width: 170rpx;" v-if="fuYaoCellShow">{{fuYao[index]}}</view>
 			<view class="text" style="-webkit-flex: 1;flex: 1;" v-html="zhugua[index]"></view>
-			<view class="text" style="-webkit-flex: 0.2;flex: 0.2;width: 80rpx;text-align: center;">
-				{{zhuganShiYing[index]}}
-			</view>
+			<view class="text" style="-webkit-flex: 0.2;flex: 0.2;width: 80rpx;text-align: center;">{{zhuganShiYing[index]}}</view>
 			<view class="text" style="-webkit-flex: 1;flex: 1;text-align: center;" v-html="biangua[index]"></view>
 		</view>
-
+		
+		<u-gap height="30" bg-color="#FFFFFF" />
 		<view class="category">
 			<view class="category-line"></view>
 			<view class="category-title">反馈信息</view>
@@ -493,8 +457,6 @@
 		color: #777;
 		font-size: $uni-font-size;
 	}
-
-
 
 	/**全伏爻*/
 	.category {
