@@ -29,9 +29,9 @@
 			if (univerfy != null) {
 				console.info("登录成功")
 				//跳转到登录成功页面
-				// uni.switchTab({
-				// 	url: "/pages/list/list"
-				// })
+				uni.switchTab({
+					url: "/pages/list/list"
+				})
 			} else {
 				uni.showToast({
 					title: '未登录',
