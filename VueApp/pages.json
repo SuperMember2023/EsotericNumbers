@@ -7,42 +7,47 @@
 			}
 		},
 		{
-		    "path" : "pages/list/list",
-		    "style" :                                                                                    
-		    {
-		        "navigationBarTitleText": "",
-		        "enablePullDownRefresh": false
-		    }
-		    
+			"path": "pages/list/list",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
 		},
 		{
-		    "path" : "pages/root/root",
-		    "style" :                                                                                    
-		    {
-		        "navigationBarTitleText": "六爻预测",
-		        "enablePullDownRefresh": false
-		    }
-		    
+			"path": "pages/root/root",
+			"style": {
+				// "navigationBarTitleText": "六爻预测", // 设置默认导航栏标题文字内容
+				// "navigationBarTextStyle": "white", // 设置默认导航栏标题文字颜色及状态栏上文字颜色，仅支持black和white
+				// "navigationBarBackgroundColor": "#3872FE", // 设置默认导航栏背景颜色及状态栏背景颜色，仅支持十六进制颜色值
+				// "navigationStyle": "default", // 支持defaul和custom两种，设置custom(自定义)后，默认导航栏将消失，微信小程序上只保持右上角胶囊按钮
+				// "backgroundColor": "#3872FE" ,// 设置窗口背景颜色，开启下拉刷新之后，下拉后可见该背景颜色(黄色)，仅小程序端生效
+				// "enablePullDownRefresh": false, // 是否开启页面下拉刷新功能
+				// // 上拉刷新不需要开启，页面提供了一个触底事件onReachBottom，只要页面存在滚动条，滚动条触底后就可以触发触底事件，从而进行下拉刷新
+				// "onReachBottomDistance": 0, // 当滚动条距离底部的距离为指定值的时候则判定为触底
+				// "disableScroll": false
+				// "app-plus": {
+				// 		"titleNView": false
+				// }
+				"navigationStyle":"custom"
+			}
+
+		}, {
+			"path": "pages/about/about",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/Login/Login",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
 		}
-        ,{
-            "path" : "pages/about/about",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/Login/Login",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
@@ -52,27 +57,26 @@
 	"tabBar": {
 		"color": "#8a8a8a",
 		"selectedColor": "#0857f9",
-		"list": [
-			{
+		"list": [{
 				"pagePath": "pages/root/root",
 				"iconPath": "static/tabicon/home_default.png",
 				"selectedIconPath": "static/tabicon/home_foucs.png",
 				"text": "首页"
-				
+
 			},
 			{
 				"pagePath": "pages/list/list",
 				"iconPath": "static/tabicon/list_default.png",
 				"selectedIconPath": "static/tabicon/list_foucs.png",
 				"text": "列表"
-				
+
 			},
 			{
 				"pagePath": "pages/about/about",
 				"iconPath": "static/tabicon/my_default.png",
 				"selectedIconPath": "static/tabicon/my_foucs.png",
 				"text": "我的"
-				
+
 			}
 		]
 	},
