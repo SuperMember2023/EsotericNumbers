@@ -12,9 +12,6 @@
 
 		<view class="quanyao">
 			<view class="btn-box">
-				<!-- <u-input v-model="inputValue" placeholder="请输入卦序号:102322" placeholder-class="color:#4a4a4a" />
-				<u-button @click="btnClick('A3')" timer-id="A">查询</u-button> -->
-				<!-- <u-button @click="testco()">请求云对象的方法</u-button> -->
 				<input class="input-default" placeholder="请输入卦序号:102322" v-model="inputValue" placeholder-class="color:#4a4a4a" />
 				<view class="btn-default" @click="btnClick('A3')">查询</view>
 			</view>
@@ -41,15 +38,8 @@
 			</view>
 			<u-line margin="10rpx"></u-line>
 		</view>
-
-		<!-- 	<view >
-						全伏爻：<u-switch v-model="fuYaoCellShow" size="32"></u-switch> 纳音：<u-switch v-model="nayinShow" size="25">
-			</u-switch> 星宿：<u-switch v-model="xinxiuShow" size="25"></u-switch>
-			<u-line color="#2979ff"></u-line>
-		</view> -->
 		<view class="quanyao">
 			<view class="lable-view">
-				<!-- 	<view class="lable-view-title"></view> -->
 				<checkbox-group @change="checkboxChange" class="check-box">
 					<label v-for="item in items" :key="item.value">
 						<checkbox :value="item.value" :checked="item.checked" style="transform:scale(0.7)" />
@@ -60,27 +50,10 @@
 			<u-line margin="10rpx"></u-line>
 		</view>
 
-		<!-- <u-gap height="20" bg-color="#FFFFFF"></u-gap> -->
-		<!-- <u-section class="mb-10" title="卦象信息" type="line" :right="false" sub-title="" padding="0 0 5px 10px" /> -->
 		<view class="category">
 			<view class="category-line"></view>
 			<view class="category-title">卦象信息</view>
 		</view>
-
-		<!-- <u-row gutter="0">
-			<u-col span="1">
-				<view></view>
-			</u-col>
-			<u-col span="2" v-if="fuYaoCellShow">
-				<view></view>
-			</u-col>
-			<u-col span="5">
-				<view>{{zhuguaName}}</view>
-			</u-col>
-			<u-col span="3">
-				<view>{{bianguaName}}</view>
-			</u-col>
-		</u-row> -->
 		<view class="list-item">
 			<view class="list-item-cel">
 				<view class="list-item-cel-view" style="-webkit-flex: 0.3;flex: 0.3;"></view>
@@ -105,7 +78,7 @@
 		<view v-for="(item, index) in userArr" @click="itemClick" class="list-style">
 			<view class="list-item">
 				<view class="list-item-cel">
-					<view class="list-item-cel-view" style="-webkit-flex: 0.3;flex: 0.3;">{{liuShen[index]}}</view>
+					<view class="list-item-cel-view" style="-webkit-flex: 0.3;flex: 0.3;" v-if="liuShen !=undefined">{{liuShen[index]}}</view>
 					<view class="list-item-cel-view" style="-webkit-flex: 0.5;flex: 0.5;" v-if="fuYaoCellShow">{{fuYao[index]}}</view>
 					<view class="list-item-cel-view" style="-webkit-flex: 1;flex: 1;" v-html="zhugua[index]"></view>
 					<view class="list-item-cel-view" style="-webkit-flex: 0.3;flex: 0.3;">{{zhuganShiYing[index]}}</view>
@@ -114,60 +87,11 @@
 				<view class="list-item-cel-line"></view>
 			</view>
 		</view>
-
-
-
-		<!-- <u-row gutter="0">
-			<u-col span="1">
-				<view>神</view>
-			</u-col>
-
-			<u-col span="2" v-if="fuYaoCellShow">
-				<view>【伏卦】</view>
-			</u-col>
-
-			<u-col span="5">
-				<view>【主卦】</view>
-			</u-col>
-			<u-col span="3">
-				<view>【变卦】</view>
-			</u-col>
-		</u-row> -->
-
-		<!-- 	<view v-for="(item, index) in userArr">
-			<u-row gutter="0">
-				<u-col span="1">
-					<view class="demo-layout bg-purple">{{liuShen[index]}}</view>
-				</u-col>
-				<u-col span="2" align="center" v-if="fuYaoCellShow">
-					<view class="demo-layout bg-purple">{{fuYao[index]}}</view>
-				</u-col>
-				<u-col span="5" align="center">
-					<view class="demo-layout bg-purple" v-html="zhugua[index]"></view>
-				</u-col>
-				<u-col span="4" align="center">
-					<view class="demo-layout bg-purple" v-html="biangua[index]"></view>
-				</u-col>
-			</u-row>
-		</view> -->
-
-		<!-- 	<view class="uni-flex uni-row" v-for="(item, index) in userArr">
-			<view class="text" style="-webkit-flex: 0.3;flex: 0.3;width: 80rpx;">{{liuShen[index]}}</view>
-			<view class="text" style="-webkit-flex: 0.5;flex: 0.5;width: 170rpx;" v-if="fuYaoCellShow">{{fuYao[index]}}</view>
-			<view class="text" style="-webkit-flex: 1;flex: 1;" v-html="zhugua[index]"></view>
-			<view class="text" style="-webkit-flex: 0.2;flex: 0.2;width: 80rpx;text-align: center;">{{zhuganShiYing[index]}}</view>
-			<view class="text" style="-webkit-flex: 1;flex: 1;text-align: center;" v-html="biangua[index]"></view>
-		</view> -->
 		<u-gap height="20" bg-color="#FFFFFF"></u-gap>
 		<view class="category">
 			<view class="category-line"></view>
 			<view class="category-title">反馈信息</view>
 		</view>
-		<!-- 	<u-gap height="20" bg-color="#FFFFFF"></u-gap>
-		<view class="u-content">
-			<u-section class="mb-10" title="反馈信息" type="line" :right="false" sub-title="" padding="0 0 5px 10px" />
-		</view> -->
-		<!-- <u-gap height="30" bg-color="#FFFFFF" /> -->
 	</view>
 </template>
 
@@ -216,50 +140,12 @@
 				shijian: '',
 				liuShen: [],
 				shenSha: '',
-
 				fuYaoShow: true,
 				fuYaoCellShow: true,
 				nayinShow: true,
-
-
 				xinxiuShow: true,
-
-				textAlign: 'left',
-				userArr: "111111",
-				inputValue: "",
-				seen: true,
-				chungua: [],
-				najia: ['', '', '', '', '', ''],
-				zhuguaName: '',
-				bianguaName: '',
-				zhugua: ['', '', '', '', '', ''],
-				biangua: ['', '', '', '', '', ''],
-				zhuganShiYing: [],
-				bianganShiYing: [],
-				fuYao: ['', '', '', '', '', ''],
-				content: `<p>露从今夜白，月是故乡明</p>
-									<img src="https://cdn.uviewui.com/uview/swiper/2.jpg" />
-								`,
-
-				//四柱信息
-
-				sizhu: '',
-				shijian: '',
-				liuShen: [],
-				shenSha: '',
-				// categoryItems: ['','',''],
-				/* #ifdef H5 */
-				fuYaoShow: false,
-				fuYaoCellShow: false,
-				nayinShow: false,
-				/* #else */
-				fuYaoShow: false,
-				fuYaoCellShow: false,
-				nayinShow: false,
-				/* #endif */
-
-
-				xinxiuShow: true,
+				textAlign: 'left'
+				
 			}
 		},
 
@@ -320,10 +206,14 @@
 				.getMonthInChinese() + '月' + lunar.getDayInChinese() + '】'
 
 			this.liuShen = sortdata.getLiuShen(lunar.getDayGanExact())
-			//神煞：
-			this.shenSha = '贵人:' + sortdata.getTianGanShenSha(lunar.getDayGanExact())[0] + '&#12288;' + ' 文昌:' + sortdata
-				.getTianGanShenSha(lunar.getDayGanExact())[1] + '&#12288;' + ' 天喜:' + sortdata.getDiZhiShenSha(lunar
-					.getYearZhiExact())
+			console.info("this.liuShen==="+this.liuShen)
+			let tianGanShenShaData = sortdata.getTianGanShenSha(lunar.getDayGanExact())
+			if(tianGanShenShaData!= undefined){
+				//神煞：
+				this.shenSha = '贵人:' + tianGanShenShaData[0] + '&#12288;' + ' 文昌:' + tianGanShenShaData[1] + '&#12288;' + ' 天喜:' + sortdata.getDiZhiShenSha(lunar
+						.getYearZhiExact())
+			}
+			
 		},
 		methods: {
 			load() {

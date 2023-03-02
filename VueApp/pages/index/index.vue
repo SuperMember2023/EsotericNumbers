@@ -26,18 +26,27 @@
 		onLoad() {
 			uni.hideTabBar()
 			var univerfy = uni.getStorageSync(univerifyInfoKey);
-			if (univerfy != null) {
-				console.info("登录成功")
-				//跳转到登录成功页面
-				uni.switchTab({
-					url: "/pages/list/list"
-				})
-			} else {
+			var arr = Object.keys(univerfy);
+			console.info("登录成功===:" + JSON.stringify(univerfy)+"=="+arr.length)
+			if (arr.length == 0) {
+				console.info("未登录")
 				uni.showToast({
 					title: '未登录',
 					icon: 'none',
 					duration: 2000
 				});
+				setTimeout(() => {
+					uni.hideLoading();
+					uni.switchTab({
+						url: "/pages/list/list"
+					})
+				}, 5000);
+			} else {
+				console.info("登录成功")
+				//跳转到登录成功页面
+				uni.switchTab({
+					url: "/pages/list/list"
+				})
 			}
 			// uni.getProvider({
 			// 	service: 'oauth',
@@ -98,7 +107,7 @@
 						that.dologin(key);
 						break;
 				}
-				
+
 
 			},
 			dologin(key) {

@@ -120,9 +120,10 @@
 
 	.dialog-area {
 		position: absolute;
-		width: 90%;
+		width: 100%;
 		height: calc(100% - 62rpx);
 		/* background: red; */
+		z-index: 99;
 	}
 
 	.dialog-list {
@@ -134,10 +135,11 @@
 		transform: translate(-50%, 0);
 		width: 94%;
 		/* width:max-content; */
-		max-height: 80vh;
+		/* max-height: 80vh; */
 		background: white;
 		border-radius: 5rpx;
 		box-shadow: 5px 5px 10px gray;
+		z-index: 100;
 
 
 	}

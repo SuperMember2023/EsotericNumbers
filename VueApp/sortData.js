@@ -168,6 +168,7 @@ function getDiZhiShenSha(tianGan)
 
 function getTianGanShenSha(tianGan)
 {
+	console.info('getTianGanShenSha=='+tianGan)
 	return tianGanShenSha[tianGan]
 }
 
