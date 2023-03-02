@@ -36,7 +36,8 @@
 							</choice-selected>
 						</view>
 					</view>
-					<button class="u-config-item" @click="btnStart">开始</button>
+					<button class="u-config-item" @click="btnStart"
+						style="margin-bottom: calc(var(--window-bottom) + 10px);">开始</button>
 				</view>
 			</view>
 		</view>
@@ -123,7 +124,7 @@
 		},
 		onShow() {
 			this.selectyaos = ["请选择", "请选择", "请选择", "请选择", "请选择", "请选择"]
-			this.yaoSelectChoiceid = [-1, -1, -1, -1,-1, -1]
+			this.yaoSelectChoiceid = [-1, -1, -1, -1, -1, -1]
 		},
 		onLoad() {
 			let {
@@ -131,7 +132,8 @@
 				system
 			} = uni.getSystemInfoSync()
 			this.statusBarHeight = statusBarHeight
-			this.navHeight = statusBarHeight + (system.indexOf('iOS') > -1 ? 44 : 48)
+			this.navHeight = statusBarHeight + (system.indexOf('iOS') > -1 ? 50 : 48)
+			console.info("this.navHeight===" + this.navHeight)
 			this.dateInstance = new Date()
 			let date = this.dateInstance
 			var lunar = Lunar.fromDate(this.dateInstance);
@@ -202,21 +204,18 @@
 
 		.top-tl {
 			margin-left: 20rpx;
-			font-size: 40rpx;
 			color: $uni-font-w-color;
-			font-size: 40rpx;
-			margin-top: 10rpx;
+			font-size: 36rpx;
+			margin-top: 8rpx;
 		}
 
 		.top-tl-tip {
 			color: $uni-font-w-color;
 			margin-left: 20rpx;
-			font-size: 22rpx;
-			margin-top: 10rpx;
+			font-size: 20rpx;
+			margin-top: 8rpx;
 		}
 	}
-
-
 
 	.body {
 		display: flex;
@@ -237,7 +236,7 @@
 		height: 100%;
 		width: 94%;
 		position: absolute;
-		top: 200rpx;
+		top: 180rpx;
 	}
 
 	.content-view-s {
