@@ -75,10 +75,10 @@
 			<view class="list-item-cel-line"></view>
 		</view>
 
-		<view v-for="(item, index) in userArr" @click="itemClick" class="list-style">
+		<view v-for="(item, index) in userArr" class="list-style">
 			<view class="list-item">
 				<view class="list-item-cel">
-					<view class="list-item-cel-view" style="-webkit-flex: 0.3;flex: 0.3;" v-if="liuShen !=undefined">{{liuShen[index]}}</view>
+					<view class="list-item-cel-view" style="-webkit-flex: 0.3;flex: 0.3;" v-if="liuShen">{{liuShen[index]}}</view>
 					<view class="list-item-cel-view" style="-webkit-flex: 0.5;flex: 0.5;" v-if="fuYaoCellShow">{{fuYao[index]}}</view>
 					<view class="list-item-cel-view" style="-webkit-flex: 1;flex: 1;" v-html="zhugua[index]"></view>
 					<view class="list-item-cel-view" style="-webkit-flex: 0.3;flex: 0.3;">{{zhuganShiYing[index]}}</view>
@@ -138,21 +138,20 @@
 				//四柱信息
 				sizhu: '',
 				shijian: '',
-				liuShen: [],
+				liuShen: ['','','','',''],
 				shenSha: '',
 				fuYaoShow: true,
-				fuYaoCellShow: true,
-				nayinShow: true,
-				xinxiuShow: true,
+				fuYaoCellShow: false,
+				nayinShow: false,
+				xinxiuShow: false,
 				textAlign: 'left'
 				
 			}
 		},
 
-		onLoad(option) {
-
+		onLoad() {
+			console.log("111")
 			let platform = uni.getSystemInfoSync().platform
-			console.log("platform:" + platform)
 			switch (platform) {
 				case 'android':
 					this.fuYaoShow = false
@@ -173,7 +172,6 @@
 		},
 		onShow() {
 			let userData = getApp().globalData.userData
-			console.log(userData)
 			let date = undefined
 			if (userData != undefined) {
 				date = userData.data ? new Date(userData.data) : new Date()
@@ -182,10 +180,9 @@
 			} else {
 				date = new Date()
 			}
-			// = userData&&userData.data?new Date(userData.data):new Date()
+			
 			var lunar = Lunar.fromDate(date);
 			var eightChar = lunar.getEightChar();
-			// '干支：' +
 			this.sizhu = lunar.getYearInGanZhiByLiChun() + '&#12288;' + lunar.getMonthInGanZhiExact() +
 				'&#12288;' + lunar.getDayInGanZhiExact() + '&#12288;' + lunar.getTimeInGanZhi() + ' 空亡：' + lunar
 				.getDayXunKong();
@@ -201,12 +198,13 @@
 			minute >= 9 ? minute : minute = '0' + minute
 			let second = date.getSeconds()
 			second >= 9 ? second : second = '0' + second
-			//'时间：' +
+			
 			this.shijian = year + '-' + month + '-' + day + "  " + hour + ":" + minute + '【' + lunar
 				.getMonthInChinese() + '月' + lunar.getDayInChinese() + '】'
 
-			this.liuShen = sortdata.getLiuShen(lunar.getDayGanExact())
-			console.info("this.liuShen==="+this.liuShen)
+			
+			this.liuShen = sortdata.getLiuShen(lunar.getDayGanExact().trim())
+			
 			let tianGanShenShaData = sortdata.getTianGanShenSha(lunar.getDayGanExact())
 			if(tianGanShenShaData!= undefined){
 				//神煞：
@@ -217,7 +215,6 @@
 		},
 		methods: {
 			load() {
-				console.info("this.userArr==="+this.userArr)
 				let zhuguanajia = sortdata.getZhuGuaNajia(this.userArr)
 
 				let zhuData = sortdata.getData(sortdata.getZhuGuaData(this.userArr));
