@@ -45,6 +45,8 @@ function getFuYao(data)
 
 function getZhuGuaNajia(userArr)
 {
+	var ss = typeof(userArr)
+	console.info("userArr-typeof==="+typeof(userArr))
 	let waigua = userArr.substring(0,3);
 	let neigua = userArr.substring(3);
 	let neichungua = neigua + neigua;

@@ -217,6 +217,7 @@
 		},
 		methods: {
 			load() {
+				console.info("this.userArr==="+this.userArr)
 				let zhuguanajia = sortdata.getZhuGuaNajia(this.userArr)
 
 				let zhuData = sortdata.getData(sortdata.getZhuGuaData(this.userArr));

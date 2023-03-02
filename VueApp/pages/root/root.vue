@@ -1,6 +1,5 @@
 <template>
 	<view>
-		<!-- <view class="nai">六爻预测</view> -->
 		<view class="nai" :style="{'height':navHeight+'px','padding-top':statusBarHeight+'px'}">
 			<view class="top-tl">
 				六爻预测
@@ -24,6 +23,10 @@
 
 				</view>
 				<!-- 在线起卦 -->
+				<view v-if="choiceIndex == 1" class="content-view-s">
+				</view>
+
+				<!-- 手动起卦 -->
 				<view v-if="choiceIndex == 2" class="content-view-s">
 					<view class="view-item" style="margin-bottom: 20rpx;" v-for="(item, index) in yaolists">
 						<view class="view-item-title">{{item.title}}</view>
@@ -35,104 +38,8 @@
 					</view>
 					<button class="u-config-item" @click="btnStart">开始</button>
 				</view>
-				<!-- 手动起卦 -->
-				<view v-if="choiceIndex == 2" class="content-view-s">
-
-
-				</view>
-
-
-
 			</view>
-
 		</view>
-
-
-		<!-- <u-section title="占事标题" :right="false"></u-section>
-			<u-input :type="type" :border="true" v-model="dataInput" class="u-config-item" placeholder="请输入您所测何事" />
-			<u-section title="手式时间" :right="false" class="u-config-item"></u-section>
-			<uni-datetime-picker type="datetime" v-model="dateInstance" class="u-config-item" />
-			<view v-for="(item, index) in yaolists">
-				<view class="list-item">
-					<view class="list-item-cel">
-						<view class="list-item-cel-view">{{item.title}}</view>
-						<view class="list-item-cel-view">{{columns[item.value].title}}</view>
-					</view>
-					<view class="list-item-cel-line"></view>
-				</view>
-			</view> -->
-
-
-
-		<!-- <u-row gutter="16" class="u-config-item">
-					<u-col span="2">
-						<view class="demo-layout bg-purple">六爻</view>
-					</u-col>
-					<u-col span="4">
-						<u-button @click="show6 = true" border="false" class="button">{{yaoName6}}</u-button>
-						<u-picker mode="selector" v-model="show6" :default-selector="defaultSelector6" :range="columns"
-							@confirm="confirm6"></u-picker>
-					</u-col>
-				</u-row>
-				<u-row gutter="16" class="u-config-item">
-					<u-col span="2">
-						<view class="demo-layout bg-purple">五爻</view>
-					</u-col>
-					<u-col span="4">
-						<u-button @click="show5 = true" border="false" class="button">{{yaoName5}}</u-button>
-						<u-picker mode="selector" v-model="show5" :default-selector="defaultSelector5" :range="columns"
-							@confirm="confirm5"></u-picker>
-					</u-col>
-				</u-row>
-				<u-row gutter="16" class="u-config-item">
-					<u-col span="2">
-						<view class="demo-layout bg-purple">四爻</view>
-					</u-col>
-					<u-col span="4">
-						<u-button @click="show4 = true" border="false" class="button">{{yaoName4}}</u-button>
-						<u-picker mode="selector" v-model="show4" :default-selector="defaultSelector4" :range="columns"
-							@confirm="confirm4"></u-picker>
-					</u-col>
-				</u-row>
-				<u-row gutter="16" class="u-config-item">
-					<u-col span="2">
-						<view class="demo-layout bg-purple">三爻</view>
-					</u-col>
-					<u-col span="4">
-						<u-button @click="show3 = true" border="false" class="button">{{yaoName3}}</u-button>
-						<u-picker mode="selector" v-model="show3" :default-selector="defaultSelector3" :range="columns"
-							@confirm="confirm3"></u-picker>
-					</u-col>
-				</u-row>
-				<u-row gutter="16" class="u-config-item">
-					<u-col span="2">
-						<view class="demo-layout bg-purple">二爻</view>
-					</u-col>
-					<u-col span="4">
-						<u-button @click="show2 = true" border="false" class="button">{{yaoName2}}</u-button>
-						<u-picker mode="selector" v-model="show2" :default-selector="defaultSelector2" :range="columns"
-							@confirm="confirm2"></u-picker>
-					</u-col>
-				</u-row>
-				<u-row gutter="16" class="u-config-item">
-					<u-col span="2">
-						<view class="demo-layout bg-purple">初爻</view>
-					</u-col>
-					<u-col span="4">
-						<u-button @click="show1 = true" border="false" class="button">{{yaoName1}}</u-button>
-						<u-picker mode="selector" v-model="show1" :default-selector="defaultSelector1" :range="columns"
-							@confirm="confirm1"></u-picker>
-					</u-col>
-				</u-row>
-				<u-button :ripple="true" ripple-bg-color="#909399" class="u-config-item" @click="btnStart">开始</u-button>
-				 -->
-
-
-
-
-
-		<!-- 与包裹页面所有内容的元素u-page同级，且在它的下方 -->
-		<!-- <u-tabbar v-model="current" :list="list" :mid-button="false"></u-tabbar> -->
 	</view>
 </template>
 
@@ -165,7 +72,6 @@
 				],
 				selectContent: '手动起卦',
 				choiceIndex: 2,
-
 				yaolists: [{
 					title: '初爻',
 					value: 0,
@@ -191,7 +97,6 @@
 				show4: false,
 				show5: false,
 				show6: false,
-				//columns: ['▅▅▅▅▅　　少阳', '▅▅　▅▅　少阴', '▅▅▅▅▅ 〇 老阳', '▅▅　▅▅ Ⅹ老阴'],
 				columns: [{
 					name: '请选择',
 					choiceItemId: -1
@@ -208,26 +113,17 @@
 					name: '▅▅▅▅▅ 〇 老阳',
 					choiceItemId: 3
 				}],
-				selectyaos: ["请选择", "请选择", "请选择", "请选择", "请选择", "请选择"],
-				yaoSelectChoiceid: [0, 0, 0, 0, 0, 0],
-				current: 0,
-				yaoName1: "请选择",
-				yaoName2: "请选择",
-				yaoName3: "请选择",
-				yaoName4: "请选择",
-				yaoName5: "请选择",
-				yaoName6: "请选择",
-				defaultSelector1: [-1],
-				defaultSelector2: [-1],
-				defaultSelector3: [-1],
-				defaultSelector4: [-1],
-				defaultSelector5: [-1],
-				defaultSelector6: [-1],
+				selectyaos: [],
+				yaoSelectChoiceid: [],
 				type: 'text',
 				dateInstance: new Date(),
 				dataInput: ''
 
 			}
+		},
+		onShow() {
+			this.selectyaos = ["请选择", "请选择", "请选择", "请选择", "请选择", "请选择"]
+			this.yaoSelectChoiceid = [-1, -1, -1, -1,-1, -1]
 		},
 		onLoad() {
 			let {
@@ -236,9 +132,6 @@
 			} = uni.getSystemInfoSync()
 			this.statusBarHeight = statusBarHeight
 			this.navHeight = statusBarHeight + (system.indexOf('iOS') > -1 ? 44 : 48)
-
-
-
 			this.dateInstance = new Date()
 			let date = this.dateInstance
 			var lunar = Lunar.fromDate(this.dateInstance);
@@ -258,12 +151,6 @@
 				.getMonthInChinese() + '月' + lunar.getDayInChinese() + '】'
 		},
 		methods: {
-			// onChoiceClick: function(position) {
-			// 	console.log("onChoiceClick : " + position);
-			// 	var _self = this;
-			// 	_self.choiceIndex = position;
-			// 	_self.selectContent = _self.choiceList[position].name;
-			// },
 			//index 是第几爻 对应的selectyaos  yaoSelectChoiceid
 			onChoiceClick(position, index) {
 				let _self = this;
@@ -276,63 +163,15 @@
 					_self.selectContent = _self.choiceList[position].name;
 				}
 			},
-			confirm1(index) {
-				this.$u.toast(this.columns[index].title);
-				this.yaoName1 = this.columns[index].title;
-				this.defaultSelector1[0] = index;
-			},
-			confirm2(index) {
-				this.$u.toast(this.columns[index]);
-				this.yaoName2 = this.columns[index];
-				this.defaultSelector2[0] = index;
-			},
-			confirm3(index) {
-				this.$u.toast(this.columns[index]);
-				this.yaoName3 = this.columns[index];
-				this.defaultSelector3[0] = index;
-			},
-			confirm4(index) {
-				this.$u.toast(this.columns[index]);
-				this.yaoName4 = this.columns[index];
-				this.defaultSelector4[0] = index;
-			},
-			confirm5(index) {
-				this.$u.toast(this.columns[index]);
-				this.yaoName5 = this.columns[index];
-				this.defaultSelector5[0] = index;
-			},
-
-			confirm6(index) {
-				this.$u.toast(this.columns[index]);
-				this.yaoName6 = this.columns[index];
-				this.defaultSelector6[0] = index;
-			},
-			columnchange(e) {
-				console.log(e);
-			},
-			btnClick(name) {
-				console.log(name);
-				this.$u.toast(name);
-			},
 			btnStart() {
-				// let userArrt = this.defaultSelector6[0] + this.defaultSelector5[0] + this.defaultSelector4[0] + this
-				// 	.defaultSelector3[0] + this.defaultSelector2[0] + this.defaultSelector1[0]
-				// console.log(userArrt)
-				// if (this.defaultSelector1 < 0 || this.defaultSelector2 < 0 || this.defaultSelector3 < 0 || this
-				// 	.defaultSelector4 < 0 || this.defaultSelector5 < 0 || this.defaultSelector6 < 0) {
-				// 	this.$u.toast("您没有完成手工指定");
-				// 	return;
-				// }
-				
-				let userArrt = this.defaultSelector6[0] + this.defaultSelector5[0] + this.defaultSelector4[0] + this
-					.defaultSelector3[0] + this.defaultSelector2[0] + this.defaultSelector1[0]
-				console.log("userArrt==="+userArrt)
+				let userArrt = this.yaoSelectChoiceid[0] + this.yaoSelectChoiceid[1] + this.yaoSelectChoiceid[2] + this
+					.yaoSelectChoiceid[3] + this.yaoSelectChoiceid[4] + this.yaoSelectChoiceid[5]
+				console.log("userArrt===" + userArrt)
 				if (this.yaoSelectChoiceid[0] < 0 || this.yaoSelectChoiceid[1] < 0 || this.yaoSelectChoiceid[2] < 0 || this
 					.yaoSelectChoiceid[3] < 0 || this.yaoSelectChoiceid[4] < 0 || this.yaoSelectChoiceid[5] < 0) {
 					this.$u.toast("您没有完成手工指定");
 					return;
 				}
-
 				const userinfo = {
 					name: userArrt,
 					data: this.dateInstance,
@@ -438,15 +277,16 @@
 			margin-left: 20rpx;
 		}
 	}
+
 	.u-config-item {
-			width: 100%;
+		width: 100%;
 		margin-top: 15rpx;
 	}
 
 
 	/****/
 
-	
+
 
 	.button {
 		width: 450rpx;
