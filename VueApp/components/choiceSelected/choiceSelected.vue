@@ -1,19 +1,17 @@
 <template>
 	<view class="container">
-		<view class="selected-area" @click="btnShowHideClick">
+		<view  class="selected-area" @click="btnShowHideClick">
 			<text class="selected-text">{{selectContent}}</text>
 			<image style="width: 30rpx;height: 30rpx;padding-right: 20rpx;"
 				:src="isShowChoice?'../../static/images/arrow_up.png':'../../static/images/arrow_down.png'"></image>
-		
+
 		</view>
 		<view v-if="isShowChoice" class="dialog-area" @click="hideDialog">
-			<view class="dialog-list" @click.stop="dialogClick">
-				<!-- <scroll-view scroll-y="true" scroll-top="0"> -->
-					<view :class="selectContent !== item.name ?'dialog-list-item':'dialog-list-item-select'"
-						v-for="(item, index) in choiceList" :key="index" @click="btnChoiceClick(index)">
-						<text style="margin: 0 20rpx;">{{item.name}}</text>
-					</view>
-				<!-- </scroll-view> -->
+			<view :class="isfullDisplay?'dialog-list':'dialog-list-small'" @click.stop="dialogClick">
+				<view :class="selectContent !== item.name ?'dialog-list-item':'dialog-list-item-select'"
+					v-for="(item, index) in choiceList" :key="index" @click="btnChoiceClick(index)">
+					<text style="margin: 0 20rpx;">{{item.name}}</text>
+				</view>
 			</view>
 		</view>
 
@@ -27,29 +25,49 @@
 			return {
 				isShowChoice: false,
 				// currentItemValue: ''
+				height:0
 			};
 		},
 		props: {
 			selectContent: String,
 			choiceIndex: Number,
-			currentItem:Number,//父类操作的列表index
-			choiceList: {}
+			currentItem: Number, //父类操作的列表index
+			choiceList: {},
+			isfullDisplay: false,
 		},
 		onLoad() {
 			console.info(this.selectContent + " choiceIndex:" + this.choiceIndex)
 		},
 		methods: {
-			btnShowHideClick() {
-				console.log('执行了点击方法')
+			// btnShowHideClick() {
+			// 	console.log('执行了点击方法')
 
-			},
+			// },
 			// 显示与隐藏选择内容
 			btnShowHideClick: function() {
 				var _this = this
+				var screenHeight = uni.getSystemInfoSync().windowHeight;
 				if (_this.isShowChoice) {
 					_this.isShowChoice = false
 				} else {
 					_this.isShowChoice = true
+					console.info("asdfasdfafs ")
+					const query = uni.createSelectorQuery().in(this);
+					query.select('.container').boundingClientRect(data => {
+						// console.log("得到布局位置信息" + JSON.stringify(data));
+						// console.log("节点离页面顶部的距离为" + data.top);
+						console.log("节点离页面顶部的距离为" + data.top+ " h: "+(data.top+300)+"===screenHeight:"+screenHeight+" :"+(screenHeight/2) );
+						// this.viewHeight = data.height
+						_this.height = (data.top+300)-(screenHeight);
+						if(_this.height>0){
+							console.info("开始滚动==="+_this.height);
+							uni.pageScrollTo({
+								scrollTop: _this.height
+							})
+						}
+					}).exec();
+
+
 				}
 			},
 			hideDialog: function() {
@@ -63,17 +81,8 @@
 			// 选择
 			btnChoiceClick: function(position) {
 				var _this = this
-				// _this.choiceIndex = position
 				_this.isShowChoice = false
-				// _this.currentItemValue = _this.choiceList[position].name
-				// if(_this.currentItem != undefined){
-				// 	console.info("currentItem==="+_this.currentItem);
-					_this.$emit("onChoiceClick", position,_this.currentItem)
-				// }else{
-				// 	console.info("999999===");
-				// 	_this.$emit("onChoiceClick", position)
-				// }
-				
+				_this.$emit("onChoiceClick", position, _this.currentItem)
 			},
 		}
 	}
@@ -110,7 +119,7 @@
 
 	}
 
-	
+
 
 	.line {
 		margin-top: 10rpx;
@@ -129,19 +138,29 @@
 	.dialog-list {
 		position: absolute;
 		/*定位的百分比是参照父容器的宽高*/
-		left: 50%;
+		/* left: 48%; */
 		top: 8rpx;
 		/*使用transform实现元素的居中是参考元素本身的宽高*/
-		transform: translate(-50%, 0);
-		width: 94%;
+		/* transform: translate(-48%, 0); */
+		width: 90%;
 		/* width:max-content; */
 		/* max-height: 80vh; */
 		background: white;
 		border-radius: 5rpx;
 		box-shadow: 5px 5px 10px gray;
 		z-index: 100;
+	}
 
-
+	.dialog-list-small {
+		position: absolute;
+		/* left: 10%; */
+		top: 8rpx;
+		/* transform: translate(-10%, 0); */
+		width: 80%;
+		background: white;
+		border-radius: 5rpx;
+		box-shadow: 5px 5px 10px gray;
+		z-index: 100;
 	}
 
 	.dialog-list scroll-view {

@@ -18,7 +18,7 @@
 					<view style="color:#4a4a4a;margin-top: 10rpx;">起卦时间{{choiceIndex}}</view>
 					<uni-datetime-picker type="datetime" v-model="dateInstance" class="u-config-item" />
 					<view style="color:#4a4a4a;margin-top: 20rpx;margin-bottom: 20rpx;">起卦方式</view>
-					<choice-selected :selectContent="selectContent" :choiceIndex="choiceIndex" :choiceList="choiceList"
+					<choice-selected :isfullDisplay="true" :selectContent="selectContent" :choiceIndex="choiceIndex" :choiceList="choiceList"
 						@onChoiceClick="onChoiceClick"></choice-selected>
 
 				</view>
@@ -31,7 +31,7 @@
 					<view class="view-item" style="margin-bottom: 20rpx;" v-for="(item, index) in yaolists">
 						<view class="view-item-title">{{item.title}}</view>
 						<view class="view-item-select">
-							<choice-selected :selectContent="selectyaos[index]" :choiceIndex="yaoSelectChoiceid[index]"
+							<choice-selected :isfullDisplay="false" :selectContent="selectyaos[index]" :choiceIndex="yaoSelectChoiceid[index]"
 								:choiceList="columns" :currentItem="index" @onChoiceClick="onChoiceClick">
 							</choice-selected>
 						</view>
