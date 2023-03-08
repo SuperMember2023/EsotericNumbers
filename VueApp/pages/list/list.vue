@@ -1,8 +1,8 @@
 <template>
 	<view class="u-demo">
-		<view>
+<!-- 		<view>
 			<u-alert-tips type="primary" title="相同 timerId 的按钮一定时间内只能点击1次"></u-alert-tips>
-		</view>
+		</view> -->
 		<u-gap height="20" bg-color="#FFFFFF"></u-gap>
 		<!-- <u-section class="mb-10" fontSize="32rpx" title="基本信息" type="line" :showLine="true" :right="true" sub-title="" padding="0 0 5px 10px" /> -->
 		<view class="category">

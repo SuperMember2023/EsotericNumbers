@@ -207,11 +207,11 @@
 					provider,
 					...res.authResult,
 				}
-				console.info("univerifyInfo===" + JSON.stringify(univerifyInfo))
+				// console.info("univerifyInfo===" + JSON.stringify(univerifyInfo))
 
 				var p1 = new Promise((resolve, reject) => {
 
-					console.info("Promise===" + JSON.stringify(univerifyInfo))
+					// console.info("Promise===" + JSON.stringify(univerifyInfo))
 					uni.request({
 						url: 'https://97fca9f2-41f6-449f-a35e-3f135d4c3875.bspapp.com/http/univerify-login',
 						method: 'POST',

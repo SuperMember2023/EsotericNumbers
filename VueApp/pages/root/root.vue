@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="nai" :style="{'height':navHeight+'px','padding-top':statusBarHeight+'px'}">
+		<view class="nai" :style="{'height':navHeight+'rpx','padding-top':statusBarHeight+'rpx'}">
 			<view class="top-tl">
 				六爻预测
 			</view>
@@ -37,7 +37,7 @@
 						</view>
 					</view>
 					<button class="u-config-item" @click="btnStart"
-						style="margin-bottom: calc(var(--window-bottom) + 10px);">开始</button>
+						style="margin-bottom: calc(var(--window-bottom) + 10px);">查看卦象</button>
 				</view>
 			</view>
 		</view>
@@ -74,22 +74,22 @@
 				selectContent: '手动起卦',
 				choiceIndex: 2,
 				yaolists: [{
-					title: '初爻',
+					title: '六爻',
 					value: 0,
 				}, {
-					title: '二爻',
+					title: '五爻',
 					value: 1,
 				}, {
-					title: '三爻',
+					title: '四爻',
 					value: 2,
 				}, {
-					title: '四爻',
+					title: '三爻',
 					value: 3,
 				}, {
-					title: '五爻',
+					title: '二爻',
 					value: 4,
 				}, {
-					title: '六爻',
+					title: '初爻',
 					value: 5,
 				}],
 				show1: false,
@@ -102,16 +102,16 @@
 					name: '请选择',
 					choiceItemId: -1
 				}, {
-					name: '▅▅　▅▅　少阴',
+					name: '▅▅　▅▅　(2背1字)',
 					choiceItemId: 0
 				}, {
-					name: '▅▅▅▅▅　　少阳',
+					name: '▅▅▅▅▅　(1背2字)',
 					choiceItemId: 1
 				}, {
-					name: '▅▅　▅▅ Ⅹ老阴',
+					name: '▅▅　▅▅Ⅹ(0背3字)',
 					choiceItemId: 2
 				}, {
-					name: '▅▅▅▅▅ 〇 老阳',
+					name: '▅▅▅▅▅〇(3背0字)',
 					choiceItemId: 3
 				}],
 				selectyaos: [],
@@ -131,9 +131,8 @@
 				statusBarHeight,
 				system
 			} = uni.getSystemInfoSync()
-			this.statusBarHeight = statusBarHeight
-			this.navHeight = statusBarHeight + (system.indexOf('iOS') > -1 ? 50 : 48)
-			console.info("this.navHeight===" + this.navHeight)
+			this.statusBarHeight = statusBarHeight + 20
+			this.navHeight = statusBarHeight + (system.indexOf('iOS') > -1 ? 250 : 250)
 			this.dateInstance = new Date()
 			let date = this.dateInstance
 			var lunar = Lunar.fromDate(this.dateInstance);
@@ -159,16 +158,15 @@
 				if (index != undefined) {
 					console.log("onyaoClick position: " + position + "---index: " + index);
 					_self.selectyaos[index] = _self.columns[position].name;
-					_self.yaoSelectChoiceid[index] = position;
+					_self.yaoSelectChoiceid[index] = position ;
 				} else { //起卦方式
 					_self.choiceIndex = position;
 					_self.selectContent = _self.choiceList[position].name;
 				}
 			},
 			btnStart() {
-				let userArrt = this.yaoSelectChoiceid[0] + this.yaoSelectChoiceid[1] + this.yaoSelectChoiceid[2] + this
-					.yaoSelectChoiceid[3] + this.yaoSelectChoiceid[4] + this.yaoSelectChoiceid[5]
-				console.log("userArrt===" + userArrt)
+				let userArrt = ''+(this.yaoSelectChoiceid[0]-1) + (this.yaoSelectChoiceid[1] - 1) + (this.yaoSelectChoiceid[2] - 1) + (this
+					.yaoSelectChoiceid[3] - 1) + (this.yaoSelectChoiceid[4] - 1) + (this.yaoSelectChoiceid[5] - 1)
 				if (this.yaoSelectChoiceid[0] < 0 || this.yaoSelectChoiceid[1] < 0 || this.yaoSelectChoiceid[2] < 0 || this
 					.yaoSelectChoiceid[3] < 0 || this.yaoSelectChoiceid[4] < 0 || this.yaoSelectChoiceid[5] < 0) {
 					this.$u.toast("您没有完成手工指定");
@@ -184,7 +182,7 @@
 					url: '/pages/list/list?userinfo=${encodeURIComponent(JSON.stringify(userinfo))}'
 				})
 
-				// this.$u.toast(this.defaultSelector2);
+				this.$u.toast(this.defaultSelector2);
 			}
 		}
 	}
@@ -205,15 +203,17 @@
 		.top-tl {
 			margin-left: 20rpx;
 			color: $uni-font-w-color;
-			font-size: 36rpx;
+			font-size:40rpx;
 			margin-top: 8rpx;
+			font-weight:bold;
 		}
 
 		.top-tl-tip {
 			color: $uni-font-w-color;
 			margin-left: 20rpx;
-			font-size: 20rpx;
+			font-size: 28rpx;
 			margin-top: 8rpx;
+			// height:100rpx;
 		}
 	}
 
@@ -222,11 +222,14 @@
 		flex-direction: column;
 		height: 100%;
 		width: 100%;
+		// padding-top: 30rpx;
+		
 	}
 
 	.content-top {
 		background-color: $uni-back-color;
 		height: 200rpx;
+		
 	}
 
 	.content-view {
@@ -236,7 +239,7 @@
 		height: 100%;
 		width: 94%;
 		position: absolute;
-		top: 180rpx;
+		top: 230rpx;
 	}
 
 	.content-view-s {
