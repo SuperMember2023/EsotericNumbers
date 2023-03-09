@@ -60,7 +60,7 @@
 				<view class="list-item-cel-view" style="-webkit-flex: 0.5;flex: 0.5;" v-if="fuYaoCellShow"></view>
 				<view class="list-item-cel-view" style="-webkit-flex: 1;flex: 1;" >{{zhuguaName}}</view>
 				<view class="list-item-cel-view" style="-webkit-flex: 0.3;flex: 0.3;"></view>
-				<view class="list-item-cel-view" style="-webkit-flex: 1;flex: 1;" >{{bianguaName}}</view>
+				<view class="list-item-cel-view" style="-webkit-flex: 1;flex: 1;" v-if="bianguaShow">{{bianguaName}}</view>
 			</view>
 			<view class="list-item-cel-line"></view>
 		</view>
@@ -70,7 +70,7 @@
 				<view class="list-item-cel-view" style="-webkit-flex: 0.5;flex: 0.5;" v-if="fuYaoCellShow">【伏卦】</view>
 				<view class="list-item-cel-view" style="-webkit-flex: 1;flex: 1;" >【主卦】</view>
 				<view class="list-item-cel-view" style="-webkit-flex: 0.3;flex: 0.3;"></view>
-				<view class="list-item-cel-view" style="-webkit-flex: 1;flex: 1;" >【变卦】</view>
+				<view class="list-item-cel-view" style="-webkit-flex: 1;flex: 1;" v-if="bianguaShow" >【变卦】</view>
 			</view>
 			<view class="list-item-cel-line"></view>
 		</view>
@@ -79,10 +79,18 @@
 			<view class="list-item">
 				<view class="list-item-cel">
 					<view class="list-item-cel-view" style="-webkit-flex: 0.3;flex: 0.3;" v-if="liuShen">{{liuShen[index]}}</view>
-					<view class="list-item-cel-view" style="-webkit-flex: 0.5;flex: 0.5;" v-if="fuYaoCellShow">{{fuYao[index]}}</view>
+					<view class="list-item-cel-view" style="-webkit-flex: 0.5;flex: 0.5;color:red" v-if="fuYaoCellShow&&banFuYao[index]">{{fuYao[index]}}</view>
+					<view class="list-item-cel-view" style="-webkit-flex: 0.5;flex: 0.5;" v-else-if="fuYaoCellShow">{{fuYao[index]}}</view>
 					<view class="list-item-cel-view" style="-webkit-flex: 1;flex: 1;" v-html="zhugua[index]"></view>
 					<view class="list-item-cel-view" style="-webkit-flex: 0.3;flex: 0.3;">{{zhuganShiYing[index]}}</view>
-					<view class="list-item-cel-view" style="-webkit-flex: 1;flex: 1;" v-html="biangua[index]"></view>
+					<view class="list-item-cel-view" style="-webkit-flex: 1;flex: 1;" v-html="biangua[index]" v-if="bianguaShow"></view>
+				</view>
+				<view class="list-item-cel-sub" v-if="banFuYao[index]&&!fuYaoCellShow">
+					<view class="list-item-cel-sub-view" style="-webkit-flex: 0.3;flex: 0.3;" v-if="liuShen"></view>
+					<view class="list-item-cel-sub-view" style="-webkit-flex: 0.5;flex: 0.5;" ></view>
+					<view class="list-item-cel-sub-view" style="-webkit-flex: 1;flex: 1;" >伏神:{{fuYao[index]}}</view>
+					<view class="list-item-cel-sub-view" style="-webkit-flex: 0.3;flex: 0.3;"></view>
+					<view class="list-item-cel-sub-view" style="-webkit-flex: 1;flex: 1;" v-if="bianguaShow"></view>
 				</view>
 				<view class="list-item-cel-line"></view>
 			</view>
@@ -130,6 +138,7 @@
 				zhuganShiYing: ['', '', '', '', ''],
 				bianganShiYing: [],
 				fuYao: ['', '', '', '', '', ''],
+				banFuYao: [false, false, false,false,false,false],
 				shiyingdong: ['', '', '', '', '', ''],
 				content: `<p>露从今夜白，月是故乡明</p>
 									<img src="https://cdn.uviewui.com/uview/swiper/2.jpg" />
@@ -144,14 +153,15 @@
 				fuYaoCellShow: false,
 				nayinShow: false,
 				xinxiuShow: false,
+				bianguaShow: false,
 				textAlign: 'left'
 				
 			}
 		},
 
 		onLoad() {
-			console.log("111")
 			let platform = uni.getSystemInfoSync().platform
+			console.log("platform:"+platform)
 			switch (platform) {
 				case 'android':
 					this.fuYaoShow = false
@@ -211,7 +221,6 @@
 				this.shenSha = '贵人:' + tianGanShenShaData[0] + '&#12288;' + ' 文昌:' + tianGanShenShaData[1] + '&#12288;' + ' 天喜:' + sortdata.getDiZhiShenSha(lunar
 						.getYearZhiExact())
 			}
-			
 		},
 		methods: {
 			load() {
@@ -230,7 +239,19 @@
 				let zhuGuaGongliuQing = sortdata.getGuaGongWuXin(zhuData)
 				let bianGuaGongliuQing = sortdata.getGuaGongWuXin(bianData)
 				let tempFuYao = sortdata.getFuYao(zhuData) //伏爻纳甲
+				console.log(tempFuYao)
 				this.fuYaoShow = tempFuYao.length > 0
+				let isShowBianYao = false
+				let fuYaoDic = {'子孙':false,'官鬼':false,'妻财':false,'父母':false,'兄弟':false};
+				//处理主卦
+				for (let i = 0; i < this.userArr.length; i++) {
+					let item = this.userArr.charAt(i);
+					let zhuGuaYao = zhuguanajia[i]
+					let wuxin = zhuGuaYao[1]
+					let liuqing = zhuGuaGongliuQing[sortdata.getWuXingIndex(wuxin)[1]]
+					// console.log(liuqing)
+					fuYaoDic[liuqing] = true;
+				}
 				//处理主卦
 				for (let i = 0; i < this.userArr.length; i++) {
 					let item = this.userArr.charAt(i);
@@ -238,13 +259,22 @@
 
 					let wuxin = zhuGuaYao[1]
 					let liuqing = zhuGuaGongliuQing[sortdata.getWuXingIndex(wuxin)[1]]
-					// let fywuxin = fuYaoWuXin.length> 0?fuYaoWuXin[1]:'' 
+					
 					if (this.fuYaoShow) {
+						//计算伏爻
 						let zhuFuYao = tempFuYao[i]
 						let fuYaoWuXin = sortdata.getWuXingIndex(zhuFuYao[1])
 						this.fuYao[i] = zhuGuaGongliuQing[fuYaoWuXin[1]] + tempFuYao[i]
+						// console.log(zhuGuaGongliuQing[fuYaoWuXin[1]]+"  "+ fuYaoDic[zhuGuaGongliuQing[fuYaoWuXin[1]]])
+						if(!fuYaoDic[zhuGuaGongliuQing[fuYaoWuXin[1]]])
+						{
+							this.banFuYao[i] = true
+						}else
+						{
+							this.banFuYao[i] = false
+						}
 					}
-
+					
 					let ganzhi = zhuGuaYao.substring(0, 2)
 					let nayin = this.nayinShow ? sortdata.getNayin(ganzhi) : ''
 					if (item == '0' || item == '2') {
@@ -258,12 +288,27 @@
 						this.zhugua[i] = '▅▅▅ ' + liuqing + zhuGuaYao + nayin
 						this.zhuganShiYing[i] = this.zhuganShiYing[i] + (item == '3' ? '〇' : '');
 					}
+					
+					if(item == '2' || item == '3')
+					{
+						isShowBianYao = true;
+					}
 				}
 
 				let bianguanajia = sortdata.getBianGuaNajia(this.userArr)
-
-
-				//处理主卦
+				let platform = uni.getSystemInfoSync().platform
+				switch (platform) {
+					case 'android':
+						this.bianguaShow = this.fuYaoCellShow?false:isShowBianYao;
+						break;
+					case 'ios':
+						this.bianguaShow = this.fuYaoCellShow?false:isShowBianYao;
+						break;
+					default:
+						this.bianguaShow = isShowBianYao;
+						break;
+				}
+				
 				//处理变卦
 				for (let i = 0; i < this.userArr.length; i++) {
 					let item = this.userArr.charAt(i);
@@ -335,6 +380,7 @@
 						this.$set(item, 'checked', false)
 					}
 				}
+				this.load()
 			}
 
 		}
@@ -348,6 +394,7 @@
 	$uni-font-size:28rpx;
 	$uni-margin-top:15rpx;
 	$uni-item-ceil-height:60rpx;
+	$uni-item-ceil-sub-height:40rpx;
 	$uni-button-height:80rpx;
 	// $uni-font-color:#d3dce6;
 
@@ -511,28 +558,46 @@
 		// background: #FFFFFF;
 		display: flex;
 		flex-direction: column;
-
+		
 		.list-item-cel {
 			display: flex;
-			// flex-direction: row;
 			justify-content: space-around;
 			height: $uni-item-ceil-height;
 
 			.list-item-cel-view {
-				// width: 100%;
-				// -webkit-flex: 1;
 				flex: 1;
-				// flex: 0.2;
 				overflow: hidden;
 				/*隐藏*/
 				white-space: nowrap;
 				/*不换行*/
 				text-overflow: ellipsis;
 				align-self: center;
-				// margin-left: 5rpx;
 				text-align: center;
-				//padding-left: 5;
-				// background-color: #777;
+			}
+		}
+		
+		.list-item-cel-sub {
+			display: flex;
+			justify-content: space-around;
+			height:30rpx;
+			color:#f00;
+			font-size: 25rpx;
+			font-weight: bold;
+			// background-color: #000;
+			margin-top: -15rpx;
+			
+		
+			.list-item-cel-sub-view {
+				flex: 1;
+				// overflow: hidden;
+				
+				/*隐藏*/
+				// white-space: nowrap;
+				/*不换行*/
+				// text-overflow: ellipsis;
+				align-self: left;
+				text-align: left;
+				
 			}
 		}
 	}

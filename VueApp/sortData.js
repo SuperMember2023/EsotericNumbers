@@ -35,6 +35,7 @@ function getFuYao(data)
 {
 	if(data[3] != '八纯卦')
 	{
+		//todo
 		return chuGuaWuXin[data[4]][1];
 	}
 	else
@@ -199,7 +200,7 @@ let wuxing = {
 	'木':['官鬼','兄弟','父母','子孙','妻财'],
 	'水':['父母','子孙','兄弟','妻财','官鬼'],
 	'火':['妻财','父母','官鬼','兄弟','子孙'],
-	'土':['父母','官鬼','妻财','父母','兄弟'],
+	'土':['子孙','官鬼','妻财','父母','兄弟'],
 }
 
 
@@ -307,10 +308,11 @@ function getShiYing(zhushiyin)
 	}else if(zhushiyin == '二世卦')
 	{
 		data=['','应','','','世','']
-	}else if(zhushiyin == '三世卦'|| zhushiyin == '游魂卦')
+	}else if(zhushiyin == '三世卦'|| zhushiyin == '归魂卦')
 	{
+		
 		data=['应','','','世','','']
-	}else if(zhushiyin == '四世卦'|| zhushiyin == '归魂卦')
+	}else if(zhushiyin == '四世卦'|| zhushiyin == '游魂卦')
 	{
 		data=['','','世','','','应']
 	}else if(zhushiyin == '五世卦')
