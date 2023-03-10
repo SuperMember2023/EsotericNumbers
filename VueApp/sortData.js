@@ -31,11 +31,20 @@ function getGuaGongWuXin(data)
 	}
 }
 
-function getFuYao(data)
+function getFuYao(data,gua)
 {
 	if(data[3] != '八纯卦')
 	{
-		//todo
+		// gua = gua.replace(/2/g,'0');
+		// gua = gua.replace(/3/g,'1');
+		// let waigua = gua.substring(0,3)
+		// let neigua = gua.substring(3,6)
+		
+		// let waiguafuyao = chuGuaFuYao[waigua]
+		// let neiguafuyao = chuGuaFuYao[neigua]
+		// console.log(waiguafuyao)
+		// console.log(neiguafuyao)
+		// return [waiguafuyao[0],waiguafuyao[1],waiguafuyao[2],neiguafuyao[3],neiguafuyao[4],neiguafuyao[5]]
 		return chuGuaWuXin[data[4]][1];
 	}
 	else
@@ -225,6 +234,18 @@ let chuGuaWuXin =
 	'艮':['土',['丙寅木','丙子水','丙戌土','丙申金','丙午火','丙辰土']],
 	'巽':['木',['辛卯木','辛巳火','辛未士','辛酉金','辛亥水','辛丑土']],
 	'兑':['金',['丁未土','丁酉金','丁亥水','丁丑土','丁卯木','丁巳火']]
+}
+
+let chuGuaFuYao = 
+{
+	'111':['壬戌土','壬申金','壬午火','甲辰土','甲寅木','甲子水'],
+	'000':['癸酉金','癸亥水','癸丑土','乙卯木','乙巳火','乙未土'],
+	'010':['戊子水','戊戌土','戊申金','戊午火','戊辰土','戊寅木'],
+	'101':['己巳火','己未土','己酉金','己亥水','己丑土','己卯木'],
+	'001':['庚戌土','庚申金','庚午火','庚辰土','庚寅木','庚子水'],
+	'100':['丙寅木','丙子水','丙戌土','丙申金','丙午火','丙辰土'],
+	'110':['辛卯木','辛巳火','辛未士','辛酉金','辛亥水','辛丑土'],
+	'011':['丁未土','丁酉金','丁亥水','丁丑土','丁卯木','丁巳火']
 }
 
 let data = {

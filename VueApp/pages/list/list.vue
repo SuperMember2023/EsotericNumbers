@@ -238,7 +238,7 @@
 				let bianGuaGong = sortdata.getGuaGong(bianData)
 				let zhuGuaGongliuQing = sortdata.getGuaGongWuXin(zhuData)
 				let bianGuaGongliuQing = sortdata.getGuaGongWuXin(bianData)
-				let tempFuYao = sortdata.getFuYao(zhuData) //伏爻纳甲
+				let tempFuYao = sortdata.getFuYao(zhuData,this.userArr) //伏爻纳甲
 				console.log(tempFuYao)
 				this.fuYaoShow = tempFuYao.length > 0
 				let isShowBianYao = false
