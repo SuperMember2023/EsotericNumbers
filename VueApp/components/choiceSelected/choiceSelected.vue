@@ -129,6 +129,7 @@
 
 	.dialog-area {
 		position: absolute;
+		
 		width: 100%;
 		height: calc(100% - 62rpx);
 		/* background: red; */
