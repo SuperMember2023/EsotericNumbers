@@ -123,6 +123,10 @@
 					{
 						value: 'xinxiuShow',
 						name: '星宿'
+					},
+					{
+						value: 'jinfangFuYShow',
+						name: '京房伏爻'
 					}
 				],
 				current: 0,
@@ -154,6 +158,7 @@
 				nayinShow: false,
 				xinxiuShow: false,
 				bianguaShow: false,
+				jinfangFuYShow: false,
 				textAlign: 'left'
 				
 			}
@@ -238,7 +243,7 @@
 				let bianGuaGong = sortdata.getGuaGong(bianData)
 				let zhuGuaGongliuQing = sortdata.getGuaGongWuXin(zhuData)
 				let bianGuaGongliuQing = sortdata.getGuaGongWuXin(bianData)
-				let tempFuYao = sortdata.getFuYao(zhuData,this.userArr) //伏爻纳甲
+				let tempFuYao = sortdata.getFuYao(zhuData,this.userArr,this.jinfangFuYShow) //伏爻纳甲
 				console.log(tempFuYao)
 				this.fuYaoShow = tempFuYao.length > 0
 				let isShowBianYao = false
@@ -355,7 +360,7 @@
 			checkboxChange: function(e) {
 				var items = this.items,
 					values = e.detail.value;
-				// console.info("values===" + values)
+				console.info("values===" + values)
 				if (values.indexOf('fuYaoShow') >= 0) {
 					this.fuYaoShow = true;
 				} else {
@@ -370,6 +375,11 @@
 					this.nayinShow = true;
 				} else {
 					this.nayinShow = false;
+				}
+				if (values.indexOf('jinfangFuYShow') >= 0) {
+					this.jinfangFuYShow = true;
+				} else {
+					this.jinfangFuYShow = false;
 				}
 				// console.info("this.fuYaoCellShow:"+this.fuYaoCellShow+" this.fuYaoShow:"+this.fuYaoShow);
 				for (var i = 0, lenI = items.length; i < lenI; ++i) {

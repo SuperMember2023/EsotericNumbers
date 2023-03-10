@@ -31,26 +31,92 @@ function getGuaGongWuXin(data)
 	}
 }
 
-function getFuYao(data,gua)
+function getFuYao(data,gua,jinfangFuYao)
 {
-	if(data[3] != '八纯卦')
+	let shigua = data[3]
+	if(!jinfangFuYao)
 	{
-		// gua = gua.replace(/2/g,'0');
-		// gua = gua.replace(/3/g,'1');
-		// let waigua = gua.substring(0,3)
-		// let neigua = gua.substring(3,6)
-		
-		// let waiguafuyao = chuGuaFuYao[waigua]
-		// let neiguafuyao = chuGuaFuYao[neigua]
-		// console.log(waiguafuyao)
-		// console.log(neiguafuyao)
-		// return [waiguafuyao[0],waiguafuyao[1],waiguafuyao[2],neiguafuyao[3],neiguafuyao[4],neiguafuyao[5]]
-		return chuGuaWuXin[data[4]][1];
+		if(shigua != '八纯卦')
+		{
+			// gua = gua.replace(/2/g,'0');
+			// gua = gua.replace(/3/g,'1');
+			// let waigua = gua.substring(0,3)
+			// let neigua = gua.substring(3,6)
+			
+			// let waiguafuyao = chuGuaFuYao[waigua]
+			// let neiguafuyao = chuGuaFuYao[neigua]
+			// console.log(waiguafuyao)
+			// console.log(neiguafuyao)
+			// return [waiguafuyao[0],waiguafuyao[1],waiguafuyao[2],neiguafuyao[3],neiguafuyao[4],neiguafuyao[5]]
+			return chuGuaWuXin[data[4]][1];
+		}
+		else
+		{
+			return [];
+		}
 	}
 	else
 	{
-		return [];
+		let fudaodata = undefined;
+		gua = gua.replace(/2/g,'0');
+		gua = gua.replace(/3/g,'1');
+		
+		let waigua = gua.substring(0,3)
+		let neigua = gua.substring(3,6)
+		let bengong  = undefined
+		let neiguafuyao = undefined
+		let waiguafuyao = undefined
+		let strAry = undefined
+		let newgua = undefined
+		switch(shigua)
+		{
+			case '一世卦':
+			case '二世卦':
+			case '三世卦':	
+				bengong = chuGuaWuXin[data[4]][1]
+				// neiguafuyao = chuGuaFuYao[chuGuaFuYaoMap[neigua]]
+				waiguafuyao = chuGuaFuYao[chuGuaFuYaoMap[waigua]]
+				fudaodata = [waiguafuyao[0],waiguafuyao[1],waiguafuyao[2],bengong[3],bengong[4],bengong[5]]
+				break
+			case '四世卦':
+			case '五世卦':
+				bengong = chuGuaWuXin[data[4]][1]
+				neiguafuyao = chuGuaFuYao[chuGuaFuYaoMap[neigua]]
+				// waiguafuyao = chuGuaFuYao[chuGuaFuYaoMap[waigua]]
+				fudaodata = [bengong[0],bengong[1],bengong[2],neiguafuyao[3],neiguafuyao[4],neiguafuyao[5]]
+				break
+			case '八纯卦':
+				fudaodata =  chuGuaFuYao[chuGuaFuYaoMap[waigua]];
+				break;
+			case '游魂卦':
+				strAry = gua.split('');
+				strAry[2] = strAry[2] == '0'?'1':'0';
+				newgua = strAry.join('');
+				waigua = newgua.substring(0,3)
+				neigua = newgua.substring(3,6)
+				bengong = chuGuaWuXin[data[4]][1]
+				//waiguafuyao = chuGuaFuYao[chuGuaFuYaoMap[waigua]]
+				waiguafuyao = chuGuaFuYao[waigua]
+				fudaodata = [waiguafuyao[0],waiguafuyao[1],waiguafuyao[2],bengong[3],bengong[4],bengong[5]]
+				break;
+			case '归魂卦':
+				strAry = gua.split('');
+				strAry[3] = strAry[3] == '0'?'1':'0';
+				strAry[4] = strAry[4] == '0'?'1':'0';
+				strAry[5] = strAry[5] == '0'?'1':'0';
+				newgua = strAry.join('');
+				bengong = chuGuaWuXin[data[4]][1]
+				waigua = newgua.substring(0,3)
+				neigua = newgua.substring(3,6)
+				console.log(newgua)
+				neiguafuyao = chuGuaFuYao[neigua]
+				fudaodata = [bengong[0],bengong[1],bengong[2],neiguafuyao[3],neiguafuyao[4],neiguafuyao[5]]
+				break;
+		}
+		return fudaodata;
 	}
+	
+	return [];
 }
 
 function getZhuGuaNajia(userArr)
@@ -178,7 +244,6 @@ function getDiZhiShenSha(tianGan)
 
 function getTianGanShenSha(tianGan)
 {
-	console.info('getTianGanShenSha=='+tianGan)
 	return tianGanShenSha[tianGan]
 }
 
@@ -211,7 +276,6 @@ let wuxing = {
 	'火':['妻财','父母','官鬼','兄弟','子孙'],
 	'土':['子孙','官鬼','妻财','父母','兄弟'],
 }
-
 
 let chunGua = {
 	'111111':['乾为天',"金",['壬戌土','壬申金','壬午火','甲辰土','甲寅木','甲子水']],
@@ -246,6 +310,18 @@ let chuGuaFuYao =
 	'100':['丙寅木','丙子水','丙戌土','丙申金','丙午火','丙辰土'],
 	'110':['辛卯木','辛巳火','辛未士','辛酉金','辛亥水','辛丑土'],
 	'011':['丁未土','丁酉金','丁亥水','丁丑土','丁卯木','丁巳火']
+}
+
+let chuGuaFuYaoMap = 
+{
+	'111':'000',
+	'000':'111',
+	'010':'101',
+	'101':'010',
+	'001':'110',
+	'100':'011',
+	'110':'001',
+	'011':'100'
 }
 
 let data = {
