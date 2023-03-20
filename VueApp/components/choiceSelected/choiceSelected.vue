@@ -82,7 +82,9 @@
 			btnChoiceClick: function(position) {
 				var _this = this
 				_this.isShowChoice = false
-				_this.$emit("onChoiceClick", position, _this.currentItem)
+				// _this.$emit("onChoiceClick", position, _this.currentItem)
+				console.info("btnChoiceClick====="+position);
+				_this.$emit("onChoiceClick", position);
 			},
 		}
 	}
