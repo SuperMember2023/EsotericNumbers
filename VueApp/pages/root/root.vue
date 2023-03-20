@@ -191,7 +191,6 @@
 				}
 			},
 			chooseMenu(index) {
-				console.info("index===" + index)
 				this.showActionSheet.itemIndex = index;
 				this.showActionSheet.show = true;
 			},
@@ -200,9 +199,9 @@
 				this.showActionSheet.show = false;
 			},
 			btnStart() {
-				let userArrt = '' + (this.yaoSelectChoiceid[0] - 1) + (this.yaoSelectChoiceid[1] - 1) + (this
-					.yaoSelectChoiceid[2] - 1) + (this
-					.yaoSelectChoiceid[3] - 1) + (this.yaoSelectChoiceid[4] - 1) + (this.yaoSelectChoiceid[5] - 1)
+				let userArrt = '' + this.yaoSelectChoiceid[0] + this.yaoSelectChoiceid[1]  + this
+					.yaoSelectChoiceid[2] + this
+					.yaoSelectChoiceid[3]  + this.yaoSelectChoiceid[4]  + this.yaoSelectChoiceid[5] 
 				if (this.yaoSelectChoiceid[0] < 0 || this.yaoSelectChoiceid[1] < 0 || this.yaoSelectChoiceid[2] < 0 || this
 					.yaoSelectChoiceid[3] < 0 || this.yaoSelectChoiceid[4] < 0 || this.yaoSelectChoiceid[5] < 0) {
 					this.$u.toast("您没有完成手工指定");
